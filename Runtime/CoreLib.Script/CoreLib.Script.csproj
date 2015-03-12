@@ -23,6 +23,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Comparer.js" />
+    <Content Include="Int64.js" />
     <Content Include="NotImplementedException.js" />
     <Content Include="DivideByZeroException.js" />
     <Content Include="RegExp.js" />
@@ -84,6 +85,7 @@
     <Content Include="TypeSystem.js" />
     <Content Include="Stopwatch.js" />
     <Content Include="IFormatProvider.js" />
+    <Content Include="UInt64.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AggregateException.js" />

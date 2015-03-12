@@ -302,6 +302,10 @@ if (typeof(window) == 'object') {
 
 #include "Int32.js"
 
+#include "Int64.js"
+
+#include "UInt64.js"
+
 #include "JsDate.js"
 
 #include "ArrayEnumerator.js"
