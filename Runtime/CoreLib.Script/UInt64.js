@@ -90,6 +90,7 @@ $ss_UInt64.op_Multiply = function (a, b) {
     return c;
 };
 $ss_UInt64.op_Division = function (a, b) {
+    debugger;
     if (b.equalsT($ss_UInt64.minValue)) {
         throw new ss.DivideByZeroException();
     }
@@ -169,34 +170,50 @@ $ss_UInt64.op_ExclusiveOr = function (a, b) {
     return new $ss_UInt64(a.$low ^ b.$low, a.$mid ^ b.$mid, a.$high ^ b.$high);
 };
 $ss_UInt64.op_LeftShift = function (a, b) {
-    //same as Int64
     b = b & 63;
-    var maxShift = 8;
-    if (b > 8) {
-        return $ss_UInt64.op_LeftShift($ss_UInt64.op_LeftShift(a, maxShift), b - maxShift);
+    if (b === 0) {
+        return a;
     }
-    var cLowT = a.$low << b;
-    var cLow = cLowT & 16777215;
-    var rLow = cLowT >>> 24 & 16777215;
-    var cMidT = a.$mid << b | rLow;
-    var cMid = cMidT & 16777215;
-    var rMid = cMidT >>> 24 & 65535;
-    var cHighT = a.$high << b;
-    var cHigh = cHighT & 65535 | rMid;
+    var cLow, cMid, cHigh;
+    if (b <= 24) {
+        cLow = a.$low << b;
+        cMid = a.$low >> 24 - b | a.$mid << b;
+        cHigh = a.$mid >> 24 - b | a.$high << b;
+    }
+    else if (b <= 48) {
+        cLow = 0;
+        cMid = a.$low << b - 24;
+        cHigh = a.$low >> 48 - b | a.$mid << b - 24;
+    }
+    else {
+        cLow = 0;
+        cMid = 0;
+        cHigh = a.$low << b - 48;
+    }
     return new $ss_UInt64(cLow, cMid, cHigh);
 };
 $ss_UInt64.op_RightShift = function (a, b) {
     b = b & 63;
-    if (b > 24) {
-        return $ss_UInt64.op_RightShift($ss_UInt64.op_RightShift(a, 24), b - 24);
+    if (b === 0) {
+        return a;
     }
-    var m = (1 << b) - 1;
-    var rHigh = (a.$high & m) << 24 - b;
-    var cHighT = a.$high >> b;
-    var rMid = (a.$mid & m) << 24 - b;
-    var cMidT = a.$mid >> b;
-    var cLowT = a.$low >> b;
-    return new $ss_UInt64(cLowT | rMid, cMidT | rHigh, cHighT);
+    var cLow, cMid, cHigh;
+    if (b <= 24) {
+        cLow = a.$mid << 24 - b | a.$low >> b;
+        cMid = a.$high << 24 - b | a.$mid >> b;
+        cHigh = a.$high >> b;
+    }
+    else if (b <= 48) {
+        cLow = a.$high << 48 - b | a.$mid >> b - 24;
+        cMid = a.$high >> b - 24;
+        cHigh = 0;
+    }
+    else {
+        cLow = a.$high >> b - 48;
+        cMid = 0;
+        cHigh = 0;
+    }
+    return new $ss_UInt64(cLow, cMid, cHigh);
 };
 $ss_UInt64.op_Equality = function (a, b) {
     //same as Int64
@@ -275,7 +292,7 @@ $ss_UInt64.op_GreaterThan = function (a, b) {
     return a.$low > b.$low;
 };
 $ss_UInt64.op_UnaryNegation = function (a) {
-    return $ss_Int64.op_Addition($ss_Int64.op_Explicit$6($ss_UInt64.op_OnesComplement(a)), $ss_Int64.one);
+    return $ss_Int64.op_Addition($ss_Int64.op_Explicit$b($ss_UInt64.op_OnesComplement(a)), $ss_Int64.one);
 };
 $ss_UInt64.op_OnesComplement = function (a) {
     return new $ss_UInt64(~a.$low, ~a.$mid, ~a.$high);
@@ -309,25 +326,25 @@ $ss_UInt64.op_Decrement = function (a) {
     }
     return new $ss_UInt64(cLow, cMid, cHigh);
 };
-$ss_UInt64.op_Explicit$3 = function (a) {
+$ss_UInt64.op_Explicit$6 = function (a) {
     return new $ss_UInt64(a.$low, a.$mid, a.$high);
 };
 $ss_UInt64.op_Implicit = function (a) {
     return new $ss_UInt64(a, 0, 0);
 };
-$ss_UInt64.op_Implicit$3 = function (a) {
+$ss_UInt64.op_Explicit$4 = function (a) {
     return new $ss_UInt64(a, ((a < 0) ? 16777215 : 0), ((a < 0) ? 65535 : 0));
-};
-$ss_UInt64.op_Implicit$4 = function (a) {
-    return new $ss_UInt64(a, 0, 0);
 };
 $ss_UInt64.op_Implicit$1 = function (a) {
+    return new $ss_UInt64(a, 0, 0);
+};
+$ss_UInt64.op_Explicit$2 = function (a) {
     return new $ss_UInt64(a, ((a < 0) ? 16777215 : 0), ((a < 0) ? 65535 : 0));
 };
-$ss_UInt64.op_Implicit$5 = function (a) {
+$ss_UInt64.op_Implicit$2 = function (a) {
     return new $ss_UInt64(a, a >>> 24, 0);
 };
-$ss_UInt64.op_Implicit$2 = function (a) {
+$ss_UInt64.op_Explicit$3 = function (a) {
     return new $ss_UInt64(a, a >> 24, ((a < 0) ? 65535 : 0));
 };
 $ss_UInt64.op_Explicit$1 = function (a) {
@@ -340,41 +357,41 @@ $ss_UInt64.op_Explicit$1 = function (a) {
     var n2 = ss.Int32.trunc(floorN / 281474976710656) | 0;
     return new $ss_UInt64(n0, n1, n2);
 };
-$ss_UInt64.op_Explicit$2 = function (a) {
+$ss_UInt64.op_Explicit$5 = function (a) {
     return $ss_UInt64.op_Explicit$1(a);
 };
 $ss_UInt64.op_Explicit = function (a) {
     return $ss_UInt64.op_Explicit$1(a);
 };
-$ss_UInt64.op_Implicit$6 = function (a) {
+$ss_UInt64.op_Explicit$7 = function (a) {
     return a.$low & 255;
 };
-$ss_UInt64.op_Implicit$9 = function (a) {
+$ss_UInt64.op_Explicit$b = function (a) {
     return a.$low & 255;
 };
-$ss_UInt64.op_Implicit$a = function (a) {
+$ss_UInt64.op_Explicit$d = function (a) {
     return a.$low & 65535;
 };
-$ss_UInt64.op_Implicit$7 = function (a) {
+$ss_UInt64.op_Explicit$9 = function (a) {
     return a.$low & 65535;
 };
-$ss_UInt64.op_Implicit$b = function (a) {
+$ss_UInt64.op_Explicit$e = function (a) {
     //return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
     // return (a.$low | a.$mid << 24) & 4294967295;
     throw new ss.NotImplementedException();
 };
-$ss_UInt64.op_Implicit$8 = function (a) {
+$ss_UInt64.op_Explicit$a = function (a) {
     //return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
     // return (a.$low | a.$mid << 24) & 4294967295;
     throw new ss.NotImplementedException();
 };
-$ss_UInt64.op_Explicit$5 = function (a) {
+$ss_UInt64.op_Explicit$8 = function (a) {
     return 16777216 * (16777216 * a.$high + a.$mid) + a.$low;
 };
-$ss_UInt64.op_Explicit$6 = function (a) {
+$ss_UInt64.op_Explicit$c = function (a) {
     return 16777216 * (16777216 * a.$high + a.$mid) + a.$low;
 };
-$ss_UInt64.op_Explicit$4 = function (a) {
+$ss_UInt64.op_Implicit$3 = function (a) {
     return 16777216 * (16777216 * a.$high + a.$mid) + a.$low;
 };
 global.ss.UInt64 = $ss_UInt64;

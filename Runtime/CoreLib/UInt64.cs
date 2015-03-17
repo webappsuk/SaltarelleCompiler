@@ -311,41 +311,60 @@ namespace System
 
         public static UInt64 operator <<(UInt64 a, int b)
         {
-            //same as Int64
-            b = b & 0x3f;
+            b = b & 63;
+            if (b == 0) return a;
 
-            const int maxShift = 8;
+            int cLow, cMid, cHigh;
 
-            if (b > 8)
-                return (a << maxShift) << (b - maxShift);
-
-            int cLowT = a.Low << b;
-            int cLow = cLowT & 0xffffff;
-            int rLow = (int)((uint)cLowT >> 24) & 0xffffff;
-            int cMidT = (a.Mid << b) | rLow;
-            int cMid = cMidT & 0xffffff;
-            int rMid = (int)((uint)cMidT >> 24) & 0xffff;
-            int cHighT = a.High << b;
-            int cHigh = (cHighT & 0xffff) | rMid;
+            if (b <= 24)
+            {
+                cLow = (a.Low << b);
+                cMid = (a.Low >> (24 - b)) | (a.Mid << b);
+                cHigh = (a.Mid >> (24 - b)) | (a.High << b);
+            }
+            else if (b <= 48)
+            {
+                cLow = 0;
+                cMid = (a.Low << (b - 24));
+                cHigh = (a.Low >> (48 - b)) | (a.Mid << (b - 24));
+            }
+            else
+            {
+                cLow = 0;
+                cMid = 0;
+                cHigh = (a.Low << (b - 48));
+            }
 
             return new UInt64(cLow, cMid, cHigh);
         }
 
         public static UInt64 operator >>(UInt64 a, int b)
         {
-            b = b & 0x3f;
+            b = b & 63;
+            if (b == 0) return a;
 
-            if (b > 24)
-                return (a >> 24) >> (b - 24);
+            int cLow, cMid, cHigh;
 
-            int m = (1 << b) - 1;
-            int rHigh = (a.High & m) << (24 - b);
-            int cHighT = a.High >> b;
-            int rMid = (a.Mid & m) << (24 - b);
-            int cMidT = a.Mid >> b;
-            int cLowT = a.Low >> b;
+            if (b <= 24)
+            {
+                cLow = (a.Mid << (24 - b)) | (a.Low >> b);
+                cMid = (a.High << (24 - b)) | (a.Mid >> b);
+                cHigh = (a.High >> b);
+            }
+            else if (b <= 48)
+            {
+                cLow = (a.High << (48 - b)) | (a.Mid >> (b - 24));
+                cMid = (a.High >> (b - 24));
+                cHigh = 0;
+            }
+            else
+            {
+                cLow = (a.High >> (b - 48));
+                cMid = 0;
+                cHigh = 0;
+            }
 
-            return new UInt64(cLowT | rMid, cMidT | rHigh, cHighT);
+            return new UInt64(cLow, cMid, cHigh);
         }
 
         public static bool operator ==(UInt64 a, UInt64 b)

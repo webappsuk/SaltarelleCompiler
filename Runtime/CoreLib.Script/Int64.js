@@ -75,14 +75,14 @@ $ss_Int64.op_Multiply = function (a, b) {
     if (a.equalsT($ss_Int64.zero) || b.equalsT($ss_Int64.zero)) {
         return $ss_Int64.zero;
     }
-    if ($ss_UInt64.op_GreaterThan($ss_UInt64.op_Explicit$3(a), $ss_UInt64.op_Explicit$3(b))) {
+    if ($ss_UInt64.op_GreaterThan($ss_UInt64.op_Explicit$6(a), $ss_UInt64.op_Explicit$6(b))) {
         return $ss_Int64.op_Multiply(b, a);
     }
     var c = $ss_Int64.zero;
     if ((a.$low & 1) === 1) {
         c = b;
     }
-    var au = $ss_UInt64.op_Explicit$3(a);
+    var au = $ss_UInt64.op_Explicit$6(a);
     while ($ss_UInt64.op_Inequality(au, $ss_UInt64.one)) {
         au = $ss_UInt64.op_RightShift(au, 1);
         b = $ss_Int64.op_LeftShift(b, 1);
@@ -93,19 +93,19 @@ $ss_Int64.op_Multiply = function (a, b) {
     return c;
 };
 $ss_Int64.op_Division = function (a, b) {
+    debugger;
     if (b.equalsT($ss_Int64.zero)) {
         throw new ss.DivideByZeroException();
     }
     if (a.equalsT($ss_Int64.zero)) {
         return $ss_Int64.zero;
     }
-    if (b.get_$isNegative()) {
-        return $ss_Int64.op_Division($ss_Int64.op_UnaryNegation(a), $ss_Int64.op_UnaryNegation(b));
+    if (a.equalsT(b)) {
+        return $ss_Int64.one;
     }
-    if (a.get_$isNegative()) {
-        return $ss_Int64.op_UnaryNegation($ss_Int64.op_Division($ss_Int64.op_UnaryNegation(a), b));
-    }
-    return $ss_Int64.op_Explicit$6($ss_UInt64.op_Division($ss_UInt64.op_Explicit$3(a), $ss_UInt64.op_Explicit$3(b)));
+    var negate = a.get_$isNegative() !== b.get_$isNegative();
+    var c = $ss_UInt64.op_Division($ss_UInt64.op_Explicit$6(a.get_abs()), $ss_UInt64.op_Explicit$6(b.get_abs()));
+    return (negate ? $ss_UInt64.op_UnaryNegation(c) : $ss_Int64.op_Explicit$b(c));
 };
 $ss_Int64.op_Modulus = function (a, b) {
     if (b.equalsT($ss_Int64.zero)) {
@@ -114,13 +114,12 @@ $ss_Int64.op_Modulus = function (a, b) {
     if (a.equalsT($ss_Int64.zero)) {
         return $ss_Int64.zero;
     }
-    if (b.get_$isNegative()) {
-        return $ss_Int64.op_Modulus($ss_Int64.op_UnaryNegation(a), $ss_Int64.op_UnaryNegation(b));
+    if (a.equalsT(b)) {
+        return $ss_Int64.zero;
     }
-    if (a.get_$isNegative()) {
-        return $ss_Int64.op_UnaryNegation($ss_Int64.op_Modulus($ss_Int64.op_UnaryNegation(a), b));
-    }
-    return $ss_Int64.op_Explicit$6($ss_UInt64.op_Modulus($ss_UInt64.op_Explicit$3(a), $ss_UInt64.op_Explicit$3(b)));
+    var negate = a.get_$isNegative();
+    var c = $ss_UInt64.op_Modulus($ss_UInt64.op_Explicit$6(a.get_abs()), $ss_UInt64.op_Explicit$6(b.get_abs()));
+    return (negate ? $ss_UInt64.op_UnaryNegation(c) : $ss_Int64.op_Explicit$b(c));
 };
 $ss_Int64.op_BitwiseAnd = function (a, b) {
     return new $ss_Int64(a.$low & b.$low, a.$mid & b.$mid, a.$high & b.$high);
@@ -133,29 +132,51 @@ $ss_Int64.op_ExclusiveOr = function (a, b) {
 };
 $ss_Int64.op_LeftShift = function (a, b) {
     b = b & 63;
-    var maxShift = 8;
-    if (b > 8) {
-        return $ss_Int64.op_LeftShift($ss_Int64.op_LeftShift(a, maxShift), b - maxShift);
+    if (b === 0) {
+        return a;
     }
-    var cLowT = a.$low << b;
-    var cLow = cLowT & 16777215;
-    var rLow = cLowT >>> 24 & 16777215;
-    var cMidT = a.$mid << b | rLow;
-    var cMid = cMidT & 16777215;
-    var rMid = cMidT >>> 24 & 65535;
-    var cHighT = a.$high << b;
-    var cHigh = cHighT & 65535 | rMid;
+    var cLow, cMid, cHigh;
+    if (b <= 24) {
+        cLow = a.$low << b;
+        cMid = a.$low >> 24 - b | a.$mid << b;
+        cHigh = a.$mid >> 24 - b | a.$high << b;
+    }
+    else if (b <= 48) {
+        cLow = 0;
+        cMid = a.$low << b - 24;
+        cHigh = a.$low >> 48 - b | a.$mid << b - 24;
+    }
+    else {
+        cLow = 0;
+        cMid = 0;
+        cHigh = a.$low << b - 48;
+    }
     return new $ss_Int64(cLow, cMid, cHigh);
 };
 $ss_Int64.op_RightShift = function (a, b) {
     // Int64 (signed) uses arithmetic shift, UIn64 (unsigned) uses logical shift
+    b = b & 63;
     if (b === 0) {
         return a;
     }
-    if (b > 32) {
-        return $ss_Int64.op_RightShift($ss_Int64.op_RightShift(a, 32), b - 32);
+    var aHigh = (a.get_$isNegative() ? (-65536 | a.$high) : a.$high);
+    var cLow, cMid, cHigh;
+    if (b <= 24) {
+        cLow = a.$mid << 24 - b | a.$low >> b;
+        cMid = aHigh << 24 - b | a.$mid >> b;
+        cHigh = aHigh >> b;
     }
-    return (a.get_$isNegative() ? $ss_Int64.op_Explicit$6($ss_UInt64.op_BitwiseOr($ss_UInt64.op_RightShift($ss_UInt64.op_Explicit$3(a), b), $ss_UInt64.op_LeftShift($ss_UInt64.op_RightShift($ss_UInt64.maxValue, b), 64 - b))) : $ss_Int64.op_Explicit$6($ss_UInt64.op_RightShift($ss_UInt64.op_Explicit$3(a), b)));
+    else if (b <= 48) {
+        cLow = aHigh << 48 - b | a.$mid >> b - 24;
+        cMid = aHigh >> b - 24;
+        cHigh = (a.get_$isNegative() ? 65535 : 0);
+    }
+    else {
+        cLow = aHigh >> b - 48;
+        cMid = (a.get_$isNegative() ? 16777215 : 0);
+        cHigh = (a.get_$isNegative() ? 65535 : 0);
+    }
+    return new $ss_Int64(cLow, cMid, cHigh);
 };
 $ss_Int64.op_Equality = function (a, b) {
     return a.equalsT(b);
@@ -164,16 +185,16 @@ $ss_Int64.op_Inequality = function (a, b) {
     return !a.equalsT(b);
 };
 $ss_Int64.op_LessThanOrEqual = function (a, b) {
-    return ((a.get_$isNegative() === b.get_$isNegative()) ? $ss_UInt64.op_LessThanOrEqual($ss_UInt64.op_Explicit$3(a), $ss_UInt64.op_Explicit$3(b)) : b.get_$isNegative());
+    return ((a.get_$isNegative() === b.get_$isNegative()) ? $ss_UInt64.op_LessThanOrEqual($ss_UInt64.op_Explicit$6(a), $ss_UInt64.op_Explicit$6(b)) : a.get_$isNegative());
 };
 $ss_Int64.op_GreaterThanOrEqual = function (a, b) {
-    return ((a.get_$isNegative() === b.get_$isNegative()) ? $ss_UInt64.op_GreaterThanOrEqual($ss_UInt64.op_Explicit$3(a), $ss_UInt64.op_Explicit$3(b)) : b.get_$isNegative());
+    return ((a.get_$isNegative() === b.get_$isNegative()) ? $ss_UInt64.op_GreaterThanOrEqual($ss_UInt64.op_Explicit$6(a), $ss_UInt64.op_Explicit$6(b)) : b.get_$isNegative());
 };
 $ss_Int64.op_LessThan = function (a, b) {
-    return ((a.get_$isNegative() === b.get_$isNegative()) ? $ss_UInt64.op_LessThan($ss_UInt64.op_Explicit$3(a), $ss_UInt64.op_Explicit$3(b)) : b.get_$isNegative());
+    return ((a.get_$isNegative() === b.get_$isNegative()) ? $ss_UInt64.op_LessThan($ss_UInt64.op_Explicit$6(a), $ss_UInt64.op_Explicit$6(b)) : a.get_$isNegative());
 };
 $ss_Int64.op_GreaterThan = function (a, b) {
-    return ((a.get_$isNegative() === b.get_$isNegative()) ? $ss_UInt64.op_GreaterThan($ss_UInt64.op_Explicit$3(a), $ss_UInt64.op_Explicit$3(b)) : b.get_$isNegative());
+    return ((a.get_$isNegative() === b.get_$isNegative()) ? $ss_UInt64.op_GreaterThan($ss_UInt64.op_Explicit$6(a), $ss_UInt64.op_Explicit$6(b)) : b.get_$isNegative());
 };
 $ss_Int64.op_UnaryNegation = function (a) {
     return $ss_Int64.op_Addition($ss_Int64.op_OnesComplement(a), $ss_Int64.one);
@@ -208,7 +229,7 @@ $ss_Int64.op_Decrement = function (a) {
     }
     return new $ss_Int64(cLow, cMid, cHigh);
 };
-$ss_Int64.op_Explicit$6 = function (a) {
+$ss_Int64.op_Explicit$b = function (a) {
     return new $ss_Int64(a.$low, a.$mid, a.$high);
 };
 $ss_Int64.op_Implicit = function (a) {
@@ -230,47 +251,47 @@ $ss_Int64.op_Implicit$2 = function (a) {
     return new $ss_Int64(a, a >> 24, ((a < 0) ? 65535 : 0));
 };
 $ss_Int64.op_Explicit$1 = function (a) {
-    var r = $ss_Int64.op_Explicit$6($ss_UInt64.op_Explicit$1(Math.abs(a)));
+    var r = $ss_Int64.op_Explicit$b($ss_UInt64.op_Explicit$1(Math.abs(a)));
     return ((a < 0) ? $ss_Int64.op_UnaryNegation(r) : r);
 };
 $ss_Int64.op_Explicit$2 = function (a) {
-    var r = $ss_Int64.op_Explicit$6($ss_UInt64.op_Explicit$2(Math.abs(a)));
+    var r = $ss_Int64.op_Explicit$b($ss_UInt64.op_Explicit$5(Math.abs(a)));
     return ((a < 0) ? $ss_Int64.op_UnaryNegation(r) : r);
 };
 $ss_Int64.op_Explicit = function (a) {
-    var r = $ss_Int64.op_Explicit$6($ss_UInt64.op_Explicit(Math.abs(a)));
+    var r = $ss_Int64.op_Explicit$b($ss_UInt64.op_Explicit(Math.abs(a)));
     return ((a < 0) ? $ss_Int64.op_UnaryNegation(r) : r);
 };
-$ss_Int64.op_Implicit$6 = function (a) {
+$ss_Int64.op_Explicit$3 = function (a) {
     return a.$low & 255;
 };
-$ss_Int64.op_Implicit$9 = function (a) {
+$ss_Int64.op_Explicit$7 = function (a) {
     return a.$low & 255;
 };
-$ss_Int64.op_Implicit$a = function (a) {
+$ss_Int64.op_Explicit$9 = function (a) {
     return a.$low & 65535;
 };
-$ss_Int64.op_Implicit$7 = function (a) {
+$ss_Int64.op_Explicit$5 = function (a) {
     return a.$low & 65535;
 };
-$ss_Int64.op_Implicit$b = function (a) {
+$ss_Int64.op_Explicit$a = function (a) {
     //return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
     // return (a.$low | a.$mid << 24) & 4294967295;
     throw new ss.NotImplementedException();
 };
-$ss_Int64.op_Implicit$8 = function (a) {
+$ss_Int64.op_Explicit$6 = function (a) {
     //return (Int32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
     // return (a.$low | a.$mid << 24) & 4294967295;
     throw new ss.NotImplementedException();
 };
 $ss_Int64.op_Explicit$4 = function (a) {
-    return (a.get_$isNegative() ? -$ss_UInt64.op_Explicit$5($ss_UInt64.op_Explicit$3($ss_Int64.op_UnaryNegation(a))) : $ss_UInt64.op_Explicit$5($ss_UInt64.op_Explicit$3(a)));
+    return (a.get_$isNegative() ? -$ss_UInt64.op_Explicit$8($ss_UInt64.op_Explicit$6($ss_Int64.op_UnaryNegation(a))) : $ss_UInt64.op_Explicit$8($ss_UInt64.op_Explicit$6(a)));
 };
-$ss_Int64.op_Explicit$5 = function (a) {
-    return (a.get_$isNegative() ? -$ss_UInt64.op_Explicit$6($ss_UInt64.op_Explicit$3($ss_Int64.op_UnaryNegation(a))) : $ss_UInt64.op_Explicit$6($ss_UInt64.op_Explicit$3(a)));
+$ss_Int64.op_Explicit$8 = function (a) {
+    return (a.get_$isNegative() ? -$ss_UInt64.op_Explicit$c($ss_UInt64.op_Explicit$6($ss_Int64.op_UnaryNegation(a))) : $ss_UInt64.op_Explicit$c($ss_UInt64.op_Explicit$6(a)));
 };
-$ss_Int64.op_Explicit$3 = function (a) {
-    return (a.get_$isNegative() ? -$ss_UInt64.op_Explicit$4($ss_UInt64.op_Explicit$3($ss_Int64.op_UnaryNegation(a))) : $ss_UInt64.op_Explicit$4($ss_UInt64.op_Explicit$3(a)));
+$ss_Int64.op_Implicit$6 = function (a) {
+    return (a.get_$isNegative() ? -$ss_UInt64.op_Implicit$3($ss_UInt64.op_Explicit$6($ss_Int64.op_UnaryNegation(a))) : $ss_UInt64.op_Implicit$3($ss_UInt64.op_Explicit$6(a)));
 };
 global.ss.Int64 = $ss_Int64;
 ss.initClass($ss_Int64, $asm, {
@@ -290,7 +311,7 @@ ss.initClass($ss_Int64, $asm, {
         return this.format(null);
     },
     format: function (format) {
-        return (this.get_$isNegative() ? ('-' + $ss_UInt64.op_Explicit$3(this).format(format)) : $ss_UInt64.op_Explicit$3(this).format(format));
+        return (this.get_$isNegative() ? ('-' + $ss_UInt64.op_Explicit$6($ss_Int64.op_UnaryNegation(this)).format(format)) : $ss_UInt64.op_Explicit$6(this).format(format));
     },
     compareTo: function (other) {
         if ($ss_Int64.op_LessThan(this, other)) {
