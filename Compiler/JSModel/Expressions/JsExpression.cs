@@ -85,6 +85,7 @@ namespace Saltarelle.Compiler.JSModel.Expressions {
 		// Fake
 		TypeReference,
 		Literal,
+        Long,
 
 		AssignFirst = Assign,
 		AssignLast = BitwiseXorAssign,
@@ -292,6 +293,11 @@ namespace Saltarelle.Compiler.JSModel.Expressions {
 		}
 
 		public static JsConstantExpression Number(double value) {
+			return new JsConstantExpression(value);
+		}
+
+		public static JsConstantExpression Long(long value)
+		{
 			return new JsConstantExpression(value);
 		}
 

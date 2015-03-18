@@ -27,7 +27,7 @@ namespace Saltarelle.Compiler.JSModel
 			else if (value is uint)
 				return (double)(uint)value;
 			else if (value is long)
-				return (double)(long)value;
+				return (long)value;
 			else if (value is ulong)
 				return (double)(ulong)value;
 			else if (value is float)
@@ -46,6 +46,8 @@ namespace Saltarelle.Compiler.JSModel
 				return (bool)value ? JsExpression.True : JsExpression.False;
 			else if (value is double)
 				return JsExpression.Number((double)value);
+			else if (value is long)
+				return JsExpression.Long((long)value);
 			if (value is string)
 				return JsExpression.String((string)value);
 			else if (value == null)

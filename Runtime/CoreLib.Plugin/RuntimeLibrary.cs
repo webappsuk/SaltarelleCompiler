@@ -427,12 +427,13 @@ namespace CoreLib.Plugin {
 					case KnownTypeCode.UInt16:
 					case KnownTypeCode.Int32:
 					case KnownTypeCode.UInt32:
-					case KnownTypeCode.Int64:
-					case KnownTypeCode.UInt64:
 					case KnownTypeCode.Decimal:
 					case KnownTypeCode.Single:
 					case KnownTypeCode.Double:
 						return JsExpression.Number(0);
+					case KnownTypeCode.Int64:
+					case KnownTypeCode.UInt64:
+						return JsExpression.Long(0);
 				}
 			}
 			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(_systemScript), "getDefaultValue"), GetScriptType(type, TypeContext.GetScriptType, context));

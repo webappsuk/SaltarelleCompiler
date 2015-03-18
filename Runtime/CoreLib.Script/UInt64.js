@@ -13,15 +13,17 @@ $ss_UInt64.createInstance = function () {
     return ss.Int32.Zero;
 };
 $ss_UInt64.getDefaultValue = $ss_UInt64.createInstance;
-$ss_UInt64.parse = function (text) {
+$ss_UInt64.parse = function (text, radix) {
     var result = {};
-    if (!$ss_UInt64.tryParse(text, result)) {
+    if (!$ss_UInt64.tryParse(text, radix, result)) {
         throw new ss.FormatException('Input string was not in a correct format.');
     }
     return result.$;
 };
-$ss_UInt64.tryParse = function (text, result) {
-    var radix = 10;
+$ss_UInt64.tryParse = function (text, radix, result) {
+    if (radix < 2 || radix > 36) {
+        throw new ss.ArgumentOutOfRangeException('radix', 'radix argument must be between 2 and 36');
+    }
     result.$ = $ss_UInt64.zero;
     //if (style & System.Globalization.NumberStyles.AllowHexSpecifier)
     //    radix = 16;
@@ -326,28 +328,28 @@ $ss_UInt64.op_Decrement = function (a) {
     }
     return new $ss_UInt64(cLow, cMid, cHigh);
 };
-$ss_UInt64.op_Explicit$6 = function (a) {
+$ss_UInt64.op_Explicit$5 = function (a) {
     return new $ss_UInt64(a.$low, a.$mid, a.$high);
 };
 $ss_UInt64.op_Implicit = function (a) {
     return new $ss_UInt64(a, 0, 0);
 };
-$ss_UInt64.op_Explicit$4 = function (a) {
+$ss_UInt64.op_Explicit$3 = function (a) {
     return new $ss_UInt64(a, ((a < 0) ? 16777215 : 0), ((a < 0) ? 65535 : 0));
 };
 $ss_UInt64.op_Implicit$1 = function (a) {
     return new $ss_UInt64(a, 0, 0);
 };
-$ss_UInt64.op_Explicit$2 = function (a) {
+$ss_UInt64.op_Explicit$1 = function (a) {
     return new $ss_UInt64(a, ((a < 0) ? 16777215 : 0), ((a < 0) ? 65535 : 0));
 };
 $ss_UInt64.op_Implicit$2 = function (a) {
     return new $ss_UInt64(a, a >>> 24, 0);
 };
-$ss_UInt64.op_Explicit$3 = function (a) {
+$ss_UInt64.op_Explicit$2 = function (a) {
     return new $ss_UInt64(a, a >> 24, ((a < 0) ? 65535 : 0));
 };
-$ss_UInt64.op_Explicit$1 = function (a) {
+$ss_UInt64.op_Explicit = function (a) {
     if (a < 0) {
         throw new ss.ArgumentOutOfRangeException();
     }
@@ -357,45 +359,42 @@ $ss_UInt64.op_Explicit$1 = function (a) {
     var n2 = ss.Int32.trunc(floorN / 281474976710656) | 0;
     return new $ss_UInt64(n0, n1, n2);
 };
-$ss_UInt64.op_Explicit$5 = function (a) {
-    return $ss_UInt64.op_Explicit$1(a);
+$ss_UInt64.op_Explicit$4 = function (a) {
+    return $ss_UInt64.op_Explicit(a);
 };
-$ss_UInt64.op_Explicit = function (a) {
-    return $ss_UInt64.op_Explicit$1(a);
+$ss_UInt64.fromDecimal = function (a) {
+    return $ss_UInt64.op_Explicit(a);
 };
-$ss_UInt64.op_Explicit$7 = function (a) {
+$ss_UInt64.op_Explicit$6 = function (a) {
     return a.$low & 255;
-};
-$ss_UInt64.op_Explicit$b = function (a) {
-    return a.$low & 255;
-};
-$ss_UInt64.op_Explicit$d = function (a) {
-    return a.$low & 65535;
-};
-$ss_UInt64.op_Explicit$9 = function (a) {
-    return a.$low & 65535;
-};
-$ss_UInt64.op_Explicit$e = function (a) {
-    //return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
-    // return (a.$low | a.$mid << 24) & 4294967295;
-    throw new ss.NotImplementedException();
 };
 $ss_UInt64.op_Explicit$a = function (a) {
-    //return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
-    // return (a.$low | a.$mid << 24) & 4294967295;
-    throw new ss.NotImplementedException();
-};
-$ss_UInt64.op_Explicit$8 = function (a) {
-    return 16777216 * (16777216 * a.$high + a.$mid) + a.$low;
+    return a.$low & 255;
 };
 $ss_UInt64.op_Explicit$c = function (a) {
+    return a.$low & 65535;
+};
+$ss_UInt64.op_Explicit$8 = function (a) {
+    return a.$low & 65535;
+};
+$ss_UInt64.op_Explicit$d = function (a) {
+    //return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
+    return (a.$low | a.$mid << 24) & 4294967295;
+};
+$ss_UInt64.op_Explicit$9 = function (a) {
+    //return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
+    return (a.$low | a.$mid << 24) & 4294967295;
+};
+$ss_UInt64.op_Explicit$7 = function (a) {
     return 16777216 * (16777216 * a.$high + a.$mid) + a.$low;
 };
-$ss_UInt64.op_Implicit$3 = function (a) {
+$ss_UInt64.op_Explicit$b = function (a) {
     return 16777216 * (16777216 * a.$high + a.$mid) + a.$low;
 };
-global.ss.UInt64 = $ss_UInt64;
-ss.initClass($ss_UInt64, $asm, {
+$ss_UInt64.toDecimal = function (a) {
+    return 16777216 * (16777216 * a.$high + a.$mid) + a.$low;
+};
+ss.initClass($ss_UInt64, ss, {
     format$1: function (format) {
         return this.format(format);
     },
@@ -413,6 +412,20 @@ ss.initClass($ss_UInt64, $asm, {
             var r = $ss_UInt64.op_Modulus(a, ten);
             s = r.$low.toString() + s;
             a = $ss_UInt64.op_Division(a, ten);
+        } while ($ss_UInt64.op_GreaterThan(a, $ss_UInt64.zero));
+        return s;
+    },
+    toString$1: function (radix) {
+        if (radix < 2 || radix > 36) {
+            throw new ss.ArgumentOutOfRangeException('radix', 'radix argument must be between 2 and 36');
+        }
+        var rad = new $ss_UInt64(radix, 0, 0);
+        var a = this;
+        var s = '';
+        do {
+            var r = $ss_UInt64.op_Modulus(a, rad);
+            s = r.$low.toString(radix) + s;
+            a = $ss_UInt64.op_Division(a, rad);
         } while ($ss_UInt64.op_GreaterThan(a, $ss_UInt64.zero));
         return s;
     },
@@ -437,7 +450,7 @@ ss.initClass($ss_UInt64, $asm, {
         hashCode = hashCode * 397 ^ this.$high;
         return hashCode;
     }
-}, null, [ss.IComparable, ss.IEquatable, ss.IFormattable]);
+}, Object, [ss.IComparable, ss.IEquatable, ss.IFormattable]);
 $ss_UInt64.__class = false;
 (function () {
     $ss_UInt64.minValue = new $ss_UInt64(0, 0, 0);

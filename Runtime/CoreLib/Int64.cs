@@ -3,8 +3,6 @@
 // This source code is subject to terms and conditions of the Apache License, Version 2.0.
 //
 
-using System.Runtime.CompilerServices;
-
 using System;
 using System.Runtime.CompilerServices;
 
@@ -12,7 +10,6 @@ namespace System
 {
     [ScriptNamespace("ss")]
     [ScriptName("Int64")]
-    [Imported(ObeysTypeSystem = true)]
     public struct Int64 : IComparable<Int64>, IEquatable<Int64>, IFormattable
     {
         internal readonly int Low;
@@ -26,7 +23,7 @@ namespace System
             Mid = 0;
             High = 0;
         }
-        
+
         private Int64(int low, int mid, int high)
         {
             Low = low & 0xffffff;
@@ -52,29 +49,40 @@ namespace System
             get { return IsNegative ? -this : this; }
         }
 
-        [InlineCode("{$System.Int64}.format({this}, {format})")]
+        [InlineCode("{$System.Int64}.format({format})")]
         public string Format(string format)
         {
             return ToString(format);
         }
 
+        [InlineCode("{$System.Int64}.localeFormat({format})")]
         public string LocaleFormat(string format)
         {
             return ToString(format);
         }
 
-        public static Int64 Parse(string text)
+        [InlineCode("{$System.Int64}.parse({text}, {radix})")]
+        public static Int64 Parse(string text, int radix = 10)
         {
             Int64 result;
-            if (!TryParse(text, out result))
+            if (!TryParse(text, radix, out result))
                 throw new FormatException("Input string was not in a correct format.");
 
             return result;
         }
 
+        [InlineCode("{$System.Int64}.tryParse({text}, 10, {result})")]
         public static bool TryParse(string text, out Int64 result)
         {
-            const int radix = 10;
+            return TryParse(text, 10, out result);
+        }
+
+        [InlineCode("{$System.Int64}.parse({text}, {radix}, {result})")]
+        public static bool TryParse(string text, int radix, out Int64 result)
+        {
+            if (radix < 2 || radix > 36)
+                throw new ArgumentOutOfRangeException("radix", "radix argument must be between 2 and 36");
+
             result = Zero;
 
             //if (style & System.Globalization.NumberStyles.AllowHexSpecifier)
@@ -113,10 +121,18 @@ namespace System
         public string ToString(string format)
         {
             return IsNegative
-                ? "-" + ((UInt64)this).ToString(format)
+                ? "-" + ((UInt64)(-this)).ToString(format)
                 : ((UInt64)this).ToString(format);
         }
 
+        public string ToString(int radix)
+        {
+            return IsNegative
+                ? "-" + ((UInt64)(-this)).ToString(radix)
+                : ((UInt64)this).ToString(radix);
+        }
+
+        [InlineCode("{$System.Int64}.compareTo({other})")]
         public int CompareTo(Int64 other)
         {
             if (this < other) return -1;
@@ -214,7 +230,6 @@ namespace System
 
         public static Int64 operator /(Int64 a, Int64 b)
         {
-            Debugger.Break();
             if (b.Equals(Zero))
                 throw new DivideByZeroException();
 
@@ -228,7 +243,8 @@ namespace System
 
             UInt64 c = ((UInt64)a.Abs / (UInt64)b.Abs);
 
-            return negate ? -c : (Int64)c;
+            //return negate ? -(UInt64)c : (Int64)c;
+            throw new NotImplementedException();
         }
 
         public static Int64 operator %(Int64 a, Int64 b)
@@ -246,7 +262,8 @@ namespace System
 
             UInt64 c = ((UInt64)a.Abs % (UInt64)b.Abs);
 
-            return negate ? -c : (Int64)c;
+            //return negate ? -(UInt64)c : (Int64)c;
+            throw new NotImplementedException();
         }
 
         public static Int64 operator &(Int64 a, Int64 b)
@@ -437,6 +454,7 @@ namespace System
             return new Int64((Int32)a, (Int32)(a >> 24), 0);
         }
 
+		[InlineCode("console.log('yolo')")]
         public static implicit operator Int64(Int32 a)
         {
             return new Int64(a, a >> 24, a < 0 ? 0xffff : 0);
@@ -454,40 +472,40 @@ namespace System
             return a < 0 ? -r : r;
         }
 
-        public static explicit operator Int64(Decimal a)
+        public static Int64 FromDecimal(Decimal a)
         {
-            Int64 r = (Int64)(UInt64)Math.Abs(a);
+            Int64 r = (Int64)(UInt64.FromDecimal(Math.Abs(a)));
             return a < 0 ? -r : r;
         }
 
-        public static implicit operator Byte(Int64 a)
+        public static explicit operator Byte(Int64 a)
         {
             return (Byte)(a.Low & Byte.MaxValue);
         }
 
-        public static implicit operator SByte(Int64 a)
+        public static explicit operator SByte(Int64 a)
         {
             return (SByte)(a.Low & Byte.MaxValue);
         }
 
-        public static implicit operator UInt16(Int64 a)
+        public static explicit operator UInt16(Int64 a)
         {
             return (UInt16)(a.Low & UInt16.MaxValue);
         }
 
-        public static implicit operator Int16(Int64 a)
+        public static explicit operator Int16(Int64 a)
         {
             return (Int16)(a.Low & UInt16.MaxValue);
         }
 
-        public static implicit operator UInt32(Int64 a)
+        public static explicit operator UInt32(Int64 a)
         {
             //return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
             // return (a.$low | a.$mid << 24) & 4294967295;
             throw new NotImplementedException();
         }
 
-        public static implicit operator Int32(Int64 a)
+        public static explicit operator Int32(Int64 a)
         {
             //return (Int32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
             // return (a.$low | a.$mid << 24) & 4294967295;
@@ -508,11 +526,11 @@ namespace System
                 : (Single)(UInt64)a;
         }
 
-        public static explicit operator Decimal(Int64 a)
+        public static Decimal ToDecimal(Int64 a)
         {
             return a.IsNegative
-                ? -(Decimal)(UInt64)(-a)
-                : (Decimal)(UInt64)a;
+                ? -UInt64.ToDecimal((UInt64)(-a))
+                : UInt64.ToDecimal((UInt64)a);
         }
     }
 }

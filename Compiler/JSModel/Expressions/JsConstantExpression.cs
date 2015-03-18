@@ -33,6 +33,15 @@ namespace Saltarelle.Compiler.JSModel.Expressions {
 			}
 		}
 
+        public double LongValue
+        {
+            get
+            {
+                if (NodeType != ExpressionNodeType.Long) throw new InvalidOperationException();
+                return (long)_value;
+            }
+        }
+
 		public string StringValue {
 			get {
 				if (NodeType != ExpressionNodeType.String) throw new InvalidOperationException();
@@ -64,6 +73,11 @@ namespace Saltarelle.Compiler.JSModel.Expressions {
 		}
 
 		internal JsConstantExpression(double value) : base(ExpressionNodeType.Number) {
+			_value = value;
+		}
+
+		internal JsConstantExpression(long value): base(ExpressionNodeType.Long)
+		{
 			_value = value;
 		}
 

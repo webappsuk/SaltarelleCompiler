@@ -316,6 +316,8 @@ namespace Saltarelle.Compiler.Compiler {
 				object o = JSModel.Utils.ConvertToDoubleOrStringOrBoolean(rr.ConstantValue);
 				if (o is double)
 					value = JsExpression.Number((double)o);
+				else if (o is long)
+					value = JsExpression.Long((long)o);
 				else if (o is bool)
 					value = JsExpression.Boolean((bool)o);
 				else

@@ -13,7 +13,6 @@ namespace System
     /// </summary>
     [ScriptNamespace("ss")]
     [ScriptName("UInt64")]
-    [Imported(ObeysTypeSystem = true)]
     public struct UInt64 : IComparable<UInt64>, IEquatable<UInt64>, IFormattable
     {
         internal readonly int Low;
@@ -41,7 +40,7 @@ namespace System
 
         public static readonly UInt64 One = new UInt64(1, 0, 0);
 
-        public static readonly UInt64 MaxValue = new UInt64(0xffffff, 0xffffff, 0x7fff);
+        public static readonly UInt64 MaxValue = new UInt64(0xffffff, 0xffffff, 0xffff);
 
         public string Format(string format)
         {
@@ -53,18 +52,26 @@ namespace System
             return ToString(format);
         }
 
-        public static UInt64 Parse(string text)
+        public static UInt64 Parse(string text, int radix = 10)
         {
             UInt64 result;
-            if (!TryParse(text, out result))
+            if (!TryParse(text, radix, out result))
                 throw new FormatException("Input string was not in a correct format.");
 
             return result;
         }
 
+        [InlineCode("{$System.UInt64}.tryParse({text}, 10, {result})")]
         public static bool TryParse(string text, out UInt64 result)
         {
-            const int radix = 10;
+            return TryParse(text, 10, out result);
+        }
+
+        public static bool TryParse(string text, int radix, out UInt64 result)
+        {
+            if (radix < 2 || radix > 36)
+                throw new ArgumentOutOfRangeException("radix", "radix argument must be between 2 and 36");
+            
             result = Zero;
 
             //if (style & System.Globalization.NumberStyles.AllowHexSpecifier)
@@ -108,6 +115,25 @@ namespace System
                 UInt64 r = a % ten;
                 s = r.Low.ToString() + s;
                 a = a / ten;
+            } while (a > Zero);
+
+            return s;
+        }
+
+        public string ToString(int radix)
+        {
+            if (radix < 2 || radix > 36)
+                throw new ArgumentOutOfRangeException("radix", "radix argument must be between 2 and 36");
+            UInt64 rad = new UInt64(radix, 0, 0);
+            UInt64 a = this;
+
+            string s = "";
+
+            do
+            {
+                UInt64 r = a % rad;
+                s = r.Low.ToString(radix) + s;
+                a = a / rad;
             } while (a > Zero);
 
             return s;
@@ -209,7 +235,6 @@ namespace System
 
         public static UInt64 operator /(UInt64 a, UInt64 b)
         {
-
             if (b.Equals(MinValue))
                 throw new DivideByZeroException();
 
@@ -520,7 +545,7 @@ namespace System
             return new UInt64(a, 0, 0);
         }
 
-        public static implicit operator UInt64(SByte a)
+        public static explicit operator UInt64(SByte a)
         {
             return new UInt64(a, a < 0 ? 0xffffff : 0, a < 0 ? 0xffff : 0);
         }
@@ -530,7 +555,7 @@ namespace System
             return new UInt64(a, 0, 0);
         }
 
-        public static implicit operator UInt64(Int16 a)
+        public static explicit operator UInt64(Int16 a)
         {
             return new UInt64(a, a < 0 ? 0xffffff : 0, a < 0 ? 0xffff : 0);
         }
@@ -540,7 +565,7 @@ namespace System
             return new UInt64((Int32)a, (Int32)(a >> 24), 0);
         }
 
-        public static implicit operator UInt64(Int32 a)
+        public static explicit operator UInt64(Int32 a)
         {
             return new UInt64(a, a >> 24, a < 0 ? 0xffff : 0);
         }
@@ -563,39 +588,39 @@ namespace System
             return (UInt64)(double)a;
         }
 
-        public static explicit operator UInt64(Decimal a)
+        public static UInt64 FromDecimal(Decimal a)
         {
             return (UInt64)(double)a;
         }
 
-        public static implicit operator Byte(UInt64 a)
+        public static explicit operator Byte(UInt64 a)
         {
             return (Byte)(a.Low & Byte.MaxValue);
         }
 
-        public static implicit operator SByte(UInt64 a)
+        public static explicit operator SByte(UInt64 a)
         {
             return (SByte)(a.Low & Byte.MaxValue);
         }
 
-        public static implicit operator UInt16(UInt64 a)
+        public static explicit operator UInt16(UInt64 a)
         {
             return (UInt16)(a.Low & UInt16.MaxValue);
         }
 
-        public static implicit operator Int16(UInt64 a)
+        public static explicit operator Int16(UInt64 a)
         {
             return (Int16)(a.Low & UInt16.MaxValue);
         }
 
-        public static implicit operator UInt32(UInt64 a)
+        public static explicit operator UInt32(UInt64 a)
         {
             //return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
             // return (a.$low | a.$mid << 24) & 4294967295;
             throw new NotImplementedException();
         }
 
-        public static implicit operator Int32(UInt64 a)
+        public static explicit operator Int32(UInt64 a)
         {
             //return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
             // return (a.$low | a.$mid << 24) & 4294967295;
@@ -612,7 +637,7 @@ namespace System
             return 16777216f * ((16777216f * a.High) + a.Mid) + a.Low;
         }
 
-        public static explicit operator Decimal(UInt64 a)
+        public static Decimal ToDecimal(UInt64 a)
         {
             return 16777216m * ((16777216m * a.High) + a.Mid) + a.Low;
         }
