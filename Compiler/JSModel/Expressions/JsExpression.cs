@@ -53,6 +53,8 @@ namespace Saltarelle.Compiler.JSModel.Expressions {
 
 		// Constants
 		Number,
+		Long,
+		ULong,
 		String,
 		Boolean,
 		Regexp,
@@ -85,7 +87,6 @@ namespace Saltarelle.Compiler.JSModel.Expressions {
 		// Fake
 		TypeReference,
 		Literal,
-        Long,
 
 		AssignFirst = Assign,
 		AssignLast = BitwiseXorAssign,
@@ -297,6 +298,11 @@ namespace Saltarelle.Compiler.JSModel.Expressions {
 		}
 
 		public static JsConstantExpression Long(long value)
+		{
+			return new JsConstantExpression(value);
+		}
+
+		public static JsConstantExpression ULong(ulong value)
 		{
 			return new JsConstantExpression(value);
 		}

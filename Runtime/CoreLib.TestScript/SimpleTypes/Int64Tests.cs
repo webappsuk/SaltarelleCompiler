@@ -9,7 +9,7 @@ namespace CoreLib.TestScript.SimpleTypes {
 		public void TypePropertiesAreCorrect() {
 			Assert.IsTrue((object)(long)0 is long);
 			Assert.IsFalse((object)0.5 is long);
-			Assert.AreEqual(typeof(long).FullName, "ss.Int32");
+			Assert.AreEqual(typeof(long).FullName, "ss.Int64");
 			Assert.IsFalse(typeof(long).IsClass);
 			Assert.IsTrue(typeof(IComparable<long>).IsAssignableFrom(typeof(long)));
 			Assert.IsTrue(typeof(IEquatable<long>).IsAssignableFrom(typeof(long)));
@@ -34,22 +34,22 @@ namespace CoreLib.TestScript.SimpleTypes {
 
 		[Test]
 		public void DefaultValueIs0() {
-			Assert.AreStrictEqual(GetDefaultValue<long>(), 0);
+			Assert.AreStrictEqual(GetDefaultValue<long>(), Int64.Zero);
 		}
 
 		[Test]
 		public void DefaultConstructorReturnsZero() {
-			Assert.AreStrictEqual(new long(), 0);
+			Assert.AreStrictEqual(new long(), Int64.Zero);
 		}
 
 		[Test]
 		public void CreatingInstanceReturnsZero() {
-			Assert.AreStrictEqual(Activator.CreateInstance<long>(), 0);
+			Assert.AreStrictEqual(Activator.CreateInstance<long>(), Int64.Zero);
 		}
 
 		[Test]
 		public void FormatWorks() {
-			Assert.AreEqual(((long)0x123).Format("x"), "123");
+			Assert.AreEqual(((long) 0x123).Format("x"), "123");
 		}
 
 		[Test]
@@ -107,6 +107,30 @@ namespace CoreLib.TestScript.SimpleTypes {
 			Assert.AreEqual((long)d1, 5000000000, "Positive");
 			Assert.AreEqual((long)d2, -5000000000, "Negative");
 		}
+		
+		[Test]
+		public void AdditionOfLargeInt64Works()
+		{
+			long v1 = 50000000000L, v2 = -v1, v3 = 3;
+			Assert.AreEqual(v1 + v3, 50000000003, "Positive");
+			Assert.AreEqual(v2 + v3, -49999999997, "Negative");
+		}
+
+		[Test]
+		public void SubtractionOfLargeInt64Works()
+		{
+			long v1 = 50000000000L, v2 = -v1, v3 = 3;
+			Assert.AreEqual(v1 - v3, 49999999997, "Positive");
+			Assert.AreEqual(v2 - v3, -50000000003, "Negative");
+		}
+
+		[Test]
+		public void MultiplicationOfLargeInt64Works()
+		{
+			long v1 = 50000000000L, v2 = -v1, v3 = 3;
+			Assert.AreEqual(v1 * v3, 150000000000, "Positive");
+			Assert.AreEqual(v2 * v3, -150000000000, "Negative");
+		}
 
 		[Test]
 		public void DivisionOfLargeInt64Works() {
@@ -116,8 +140,28 @@ namespace CoreLib.TestScript.SimpleTypes {
 		}
 
 		[Test]
+		public void ModulusOfLargeInt64Works()
+		{
+			long v1 = 50000000000L, v2 = -v1, v3 = 25000000000L;
+			Assert.AreEqual(v1 % v3, Int64.Zero, "Positive");
+			Assert.AreEqual(v2 % v3, Int64.Zero, "Negative");
+		}
+
+		[Test]
+		public void AndOfLargeInt64Works()
+		{
+			long v1 = 50000000000L, v2 = -v1, v3 = 25000000000L;
+			Assert.AreEqual(v1 & v3, 6444101632, "Positive");
+			Assert.AreEqual(v2 & v3, 18555897856, "Negative");
+		}
+
+		[Test]
 		public void ToStringWithoutRadixWorks() {
-			Assert.AreEqual(((long)123).ToString(), "123");
+			int test = 123;
+			long test2 = (long)test;
+            Assert.AreEqual((test2).ToString(), "123");
+			long a = 9007199254740993;
+            Assert.AreEqual((a).ToString(), "9007199254740993");
 		}
 
 		[Test]

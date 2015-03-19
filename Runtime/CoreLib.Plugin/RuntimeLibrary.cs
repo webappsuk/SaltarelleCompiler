@@ -301,8 +301,218 @@ namespace CoreLib.Plugin {
 			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int32), "div"), numerator, denominator);
 		}
 
+		public JsExpression UInt64Addition(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_Addition"), operand, operand2);
+		}
+
+		public JsExpression Int64Addition(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_Addition"), operand, operand2);
+		}
+
+		public JsExpression UInt64Subtraction(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_Subtraction"), operand, operand2);
+		}
+
+		public JsExpression Int64Subtraction(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_Subtraction"), operand, operand2);
+		}
+
+		public JsExpression UInt64Multiplication(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_Multiplication"), operand, operand2);
+		}
+
+		public JsExpression Int64Multiplication(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_Multiplication"), operand, operand2);
+		}
+
+		public JsExpression UInt64Division(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_Division"), numerator, denominator);
+		}
+
+		public JsExpression Int64Division(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_Division"), numerator, denominator);
+		}
+
+		public JsExpression UInt64Modulus(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_Modulus"), numerator, denominator);
+		}
+
+		public JsExpression Int64Modulus(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_Modulus"), numerator, denominator);
+		}
+
+		public JsExpression UInt64BitwiseAnd(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_BitwiseAnd"), operand, operand2);
+		}
+
+		public JsExpression Int64BitwiseAnd(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_BitwiseAnd"), operand, operand2);
+		}
+
+		public JsExpression UInt64BitwiseOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_BitwiseOr"), operand, operand2);
+		}
+
+		public JsExpression Int64BitwiseOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_BitwiseOr"), operand, operand2);
+		}
+
+		public JsExpression UInt64ExclusiveOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_ExculsiveOr"), operand, operand2);
+		}
+
+		public JsExpression Int64ExclusiveOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_ExculsiveOr"), operand, operand2);
+		}
+
+		public JsExpression UInt64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_OnesComplement"), operand, operand2);
+		}
+
+		public JsExpression Int64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_OnesComplement"), operand, operand2);
+		}
+
+		public JsExpression UInt64Negation(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_UnaryNegation"), operand);
+		}
+		
+		public JsExpression Int64Negation(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_UnaryNegation"), operand);
+		}
+
 		public JsExpression FloatToInt(JsExpression operand, IRuntimeContext context) {
 			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int32), "trunc"), operand);
+		}
+
+		public JsExpression Int64FromUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "fromUInt32"), operand);
+		}
+
+		public JsExpression Int64FromInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "fromInt32"), operand);
+		}
+
+		public JsExpression Int64FromUInt64(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "fromUInt64"), operand);
+		}
+
+		public JsExpression Int64FromDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "fromDouble"), operand);
+		}
+
+		public JsExpression Int64FromSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "fromSingle"), operand);
+		}
+
+		public JsExpression Int64FromDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "fromDecimal"), operand);
+		}
+
+		public JsExpression Int64ToUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "toUInt32"), operand);
+		}
+
+		public JsExpression Int64ToInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "toInt32"), operand);
+		}
+
+		public JsExpression Int64ToDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "toDouble"), operand);
+		}
+
+		public JsExpression Int64ToSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "toSingle"), operand);
+		}
+
+		public JsExpression Int64ToDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "toDecimal"), operand);
+		}
+
+		public JsExpression UInt64FromUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "fromUInt32"), operand);
+		}
+
+		public JsExpression UInt64FromInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "fromInt32"), operand);
+		}
+
+		public JsExpression UInt64FromInt64(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "fromInt64"), operand);
+		}
+
+		public JsExpression UInt64FromDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "fromDouble"), operand);
+		}
+
+		public JsExpression UInt64FromSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "fromSingle"), operand);
+		}
+
+		public JsExpression UInt64FromDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "fromDecimal"), operand);
+		}
+
+		public JsExpression UInt64ToUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "toUInt32"), operand);
+		}
+
+		public JsExpression UInt64ToInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "toInt32"), operand);
+		}
+
+		public JsExpression UInt64ToDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "toDouble"), operand);
+		}
+
+		public JsExpression UInt64ToSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "toSingle"), operand);
+		}
+
+		public JsExpression UInt64ToDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "toDecimal"), operand);
 		}
 
 		public JsExpression Coalesce(JsExpression a, JsExpression b, IRuntimeContext context) {

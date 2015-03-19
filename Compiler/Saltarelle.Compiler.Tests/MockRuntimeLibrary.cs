@@ -82,7 +82,49 @@ namespace Saltarelle.Compiler.Tests {
 		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> ReferenceNotEquals { get; set; }
 		public Func<JsExpression, IRuntimeContext, JsExpression> MakeException { get; set; }
 		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> IntegerDivision { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64Addition { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64Addition { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64Subtraction { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64Subtraction { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64Multiplication { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64Multiplication { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64Division { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64Division { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64Modulus { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64Modulus { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64BitwiseAnd { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64BitwiseAnd { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64BitwiseOr { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64BitwiseOr { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64ExclusiveOr { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64ExclusiveOr { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64OnesComplement { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64OnesComplement { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64Negation { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64Negation { get; set; }
 		public Func<JsExpression, IRuntimeContext, JsExpression> FloatToInt { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64FromUInt32 { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64FromInt32 { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64FromUInt64 { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64FromDouble { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64FromSingle { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64FromDecimal { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64ToUInt32 { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64ToInt32 { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64ToDouble { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64ToSingle { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64ToDecimal { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64FromUInt32 { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64FromInt32 { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64FromInt64 { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64FromDouble { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64FromSingle { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64FromDecimal { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64ToUInt32 { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64ToInt32 { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64ToDouble { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64ToSingle { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64ToDecimal { get; set; }
 		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Coalesce { get; set; }
 		public Func<JsExpression, IRuntimeContext, JsExpression> Lift { get; set; }
 		public Func<JsExpression, IRuntimeContext, JsExpression> FromNullable { get; set; }
@@ -185,8 +227,218 @@ namespace Saltarelle.Compiler.Tests {
 			return IntegerDivision(numerator, denominator, context);
 		}
 
+		JsExpression IRuntimeLibrary.UInt64Addition(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64Addition(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64Addition(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64Addition(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64Subtraction(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64Subtraction(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64Subtraction(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64Subtraction(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64Multiplication(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64Multiplication(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64Multiplication(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64Multiplication(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64Division(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return UInt64Division(numerator, denominator, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64Division(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return Int64Division(numerator, denominator, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64Modulus(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return UInt64Modulus(numerator, denominator, context);
+		}
+		
+		JsExpression IRuntimeLibrary.Int64Modulus(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return Int64Division(numerator, denominator, context);
+		}
+		
+		JsExpression IRuntimeLibrary.UInt64BitwiseAnd(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64BitwiseAnd(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64BitwiseAnd(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64BitwiseAnd(operand, operand2, context);
+		}
+		
+		JsExpression IRuntimeLibrary.UInt64BitwiseOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64BitwiseOr(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64BitwiseOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64BitwiseOr(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64ExclusiveOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64ExclusiveOr(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64ExclusiveOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64ExclusiveOr(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64OnesComplement(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64OnesComplement(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64Negation(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64Negation(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64Negation(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64Negation(operand, context);
+		}
+
 		JsExpression IRuntimeLibrary.FloatToInt(JsExpression operand, IRuntimeContext context) {
 			return FloatToInt(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64FromUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64FromUInt32(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64FromUInt64(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64FromUInt64(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64FromInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64FromInt32(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64FromDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64FromDouble(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64FromSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64FromSingle(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64FromDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64FromDecimal(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64ToUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64ToUInt32(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64ToInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64ToInt32(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64ToDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64ToDouble(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64ToSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64ToSingle(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64ToDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64ToDecimal(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64FromUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64FromUInt32(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64FromInt64(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64FromInt64(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64FromInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64FromInt32(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64FromDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64FromDouble(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64FromSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64FromSingle(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64FromDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64FromDecimal(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64ToUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64ToUInt32(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64ToInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64ToInt32(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64ToDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64ToDouble(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64ToSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64ToSingle(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64ToDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64ToDecimal(operand, context);
 		}
 
 		JsExpression IRuntimeLibrary.Coalesce(JsExpression a, JsExpression b, IRuntimeContext context) {

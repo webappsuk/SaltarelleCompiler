@@ -9,14 +9,15 @@ using System.Runtime.CompilerServices;
 namespace System
 {
     [ScriptNamespace("ss")]
-    [ScriptName("Int64")]
+	[ScriptName("Int64")]
+	[Imported(ObeysTypeSystem = true)]
     public struct Int64 : IComparable<Int64>, IEquatable<Int64>, IFormattable
     {
         internal readonly int Low;
         internal readonly int Mid;
         internal readonly int High;
 
-        [InlineCode("{$System.Int64}.Zero")]
+        [InlineCode("{$System.Int64}.zero")]
         private Int64(DummyTypeUsedToAddAttributeToDefaultValueTypeConstructor _)
         {
             Low = 0;
@@ -49,7 +50,6 @@ namespace System
             get { return IsNegative ? -this : this; }
         }
 
-        [InlineCode("{$System.Int64}.format({format})")]
         public string Format(string format)
         {
             return ToString(format);
@@ -162,376 +162,372 @@ namespace System
             }
         }
 
-        private const int Mask = unchecked((int)0xffffff000000);
-        public static Int64 operator +(Int64 a, Int64 b)
-        {
-            int cLow = a.Low + b.Low;
-            int rLow = (cLow & Mask) >> 24;
-            int cMid = rLow + a.Mid + b.Mid;
-            int rMid = (cMid & Mask) >> 24;
-            int cHigh = rMid + a.High + b.High;
-
-            return new Int64(cLow, cMid, cHigh);
-        }
-
-        public static Int64 operator -(Int64 a, Int64 b)
-        {
-            int cLow = (a.Low - b.Low) | 0;
-            int rLow = 0;
-            if (cLow < 0)
-            {
-                cLow = 0x1000000 + cLow;
-                rLow = -1;
-            }
-            int cMid = (rLow + ((a.Mid - b.Mid) | 0)) | 0;
-            int rMid = 0;
-            if (cMid < 0)
-            {
-                cMid = 0x1000000 + cMid;
-                rMid = -1;
-            }
-            int cHigh = (rMid + ((a.High - b.High) | 0)) | 0;
-            if (cHigh < 0)
-            {
-                cHigh = 0x10000 + cHigh;
-            }
-
-            return new Int64(cLow, cMid, cHigh);
-        }
-
-        public static Int64 operator *(Int64 a, Int64 b)
-        {
-            if (a.Equals(Zero) || b.Equals(Zero))
-                return Zero;
-
-            if ((UInt64)a > (UInt64)b)
-                return b * a;
-
-            Int64 c = Zero;
-
-            if ((a.Low & 1) == 1)
-            {
-                c = b;
-            }
-
-            UInt64 au = (UInt64)a;
-
-            while (au != UInt64.One)
-            {
-                au >>= 1;
-                b <<= 1;
-
-                if ((au.Low & 1) == 1)
-                    c += b;
-            }
-
-            return c;
-        }
-
-        public static Int64 operator /(Int64 a, Int64 b)
-        {
-            if (b.Equals(Zero))
-                throw new DivideByZeroException();
-
-            if (a.Equals(Zero))
-                return Zero;
-
-            if (a.Equals(b))
-                return One;
-
-            bool negate = a.IsNegative != b.IsNegative;
-
-            UInt64 c = ((UInt64)a.Abs / (UInt64)b.Abs);
-
-            //return negate ? -(UInt64)c : (Int64)c;
-            throw new NotImplementedException();
-        }
-
-        public static Int64 operator %(Int64 a, Int64 b)
-        {
-            if (b.Equals(Zero))
-                throw new DivideByZeroException();
-
-            if (a.Equals(Zero))
-                return Zero;
-
-            if (a.Equals(b))
-                return Zero;
-
-            bool negate = a.IsNegative;
-
-            UInt64 c = ((UInt64)a.Abs % (UInt64)b.Abs);
-
-            //return negate ? -(UInt64)c : (Int64)c;
-            throw new NotImplementedException();
-        }
-
-        public static Int64 operator &(Int64 a, Int64 b)
-        {
-            return new Int64(a.Low & b.Low, a.Mid & b.Mid, a.High & b.High);
-        }
-
-        public static Int64 operator |(Int64 a, Int64 b)
-        {
-            return new Int64(a.Low | b.Low, a.Mid | b.Mid, a.High | b.High);
-        }
-
-        public static Int64 operator ^(Int64 a, Int64 b)
-        {
-            return new Int64(a.Low ^ b.Low, a.Mid ^ b.Mid, a.High ^ b.High);
-        }
-
-        public static Int64 operator <<(Int64 a, int b)
-        {
-            b = b & 63;
-            if (b == 0) return a;
-
-            int cLow, cMid, cHigh;
-
-            if (b <= 24)
-            {
-                cLow = (a.Low << b);
-                cMid = (a.Low >> (24 - b)) | (a.Mid << b);
-                cHigh = (a.Mid >> (24 - b)) | (a.High << b);
-            }
-            else if (b <= 48)
-            {
-                cLow = 0;
-                cMid = (a.Low << (b - 24));
-                cHigh = (a.Low >> (48 - b)) | (a.Mid << (b - 24));
-            }
-            else
-            {
-                cLow = 0;
-                cMid = 0;
-                cHigh = (a.Low << (b - 48));
-            }
-
-            return new Int64(cLow, cMid, cHigh);
-        }
-
-        public static Int64 operator >>(Int64 a, int b)
-        {
-            // Int64 (signed) uses arithmetic shift, UIn64 (unsigned) uses logical shift
-            b = b & 63;
-            if (b == 0) return a;
-
-            int aHigh = a.IsNegative ? unchecked((int)0xffff0000) | a.High : a.High;
-            int cLow, cMid, cHigh;
-
-            if (b <= 24)
-            {
-                cLow = (a.Mid << (24 - b)) | (a.Low >> b);
-                cMid = (aHigh << (24 - b)) | (a.Mid >> b);
-                cHigh = (aHigh >> b);
-            }
-            else if (b <= 48)
-            {
-                cLow = (aHigh << (48 - b)) | (a.Mid >> (b - 24));
-                cMid = (aHigh >> (b - 24));
-                cHigh = a.IsNegative ? 0xffff : 0;
-            }
-            else
-            {
-                cLow = (aHigh >> (b - 48));
-                cMid = a.IsNegative ? 0xffffff : 0;
-                cHigh = a.IsNegative ? 0xffff : 0;
-            }
-
-            return new Int64(cLow, cMid, cHigh);
-        }
-
-        public static bool operator ==(Int64 a, Int64 b)
-        {
-            return a.Equals(b);
-        }
-
-        public static bool operator !=(Int64 a, Int64 b)
-        {
-            return !a.Equals(b);
-        }
-
-        public static bool operator <=(Int64 a, Int64 b)
-        {
-            return a.IsNegative == b.IsNegative ? (UInt64)a <= (UInt64)b : a.IsNegative;
-        }
-
-        public static bool operator >=(Int64 a, Int64 b)
-        {
-            return a.IsNegative == b.IsNegative ? (UInt64)a >= (UInt64)b : b.IsNegative;
-        }
-
-        public static bool operator <(Int64 a, Int64 b)
-        {
-            return a.IsNegative == b.IsNegative ? (UInt64)a < (UInt64)b : a.IsNegative;
-        }
-
-        public static bool operator >(Int64 a, Int64 b)
-        {
-            return a.IsNegative == b.IsNegative ? (UInt64)a > (UInt64)b : b.IsNegative;
-        }
-
-        [InlineCode("{a}")]
-        public static Int64 operator +(Int64 a)
-        {
-            return a;
-        }
-
-        public static Int64 operator -(Int64 a)
-        {
-            return ~a + One;
-        }
-
-        public static Int64 operator ~(Int64 a)
-        {
-            return new Int64(~a.Low, ~a.Mid, ~a.High);
-        }
-
-        public static Int64 operator ++(Int64 a)
-        {
-            int cLow = a.Low + 1;
-            int rLow = (cLow & Mask) >> 24;
-            int cMid = rLow + a.Mid;
-            int rMid = (cMid & Mask) >> 24;
-            int cHigh = rMid + a.High;
-
-            return new Int64(cLow, cMid, cHigh);
-        }
-
-        public static Int64 operator --(Int64 a)
-        {
-            int cLow = (a.Low - 1) | 0;
-            int rLow = 0;
-            if (cLow < 0)
-            {
-                cLow = 0x1000000 + cLow;
-                rLow = -1;
-            }
-            int cMid = (rLow + a.Mid) | 0;
-            int rMid = 0;
-            if (cMid < 0)
-            {
-                cMid = 0x1000000 + cMid;
-                rMid = -1;
-            }
-            int cHigh = (rMid + a.High) | 0;
-            if (cHigh < 0)
-            {
-                cHigh = 0x10000 + cHigh;
-            }
-
-            return new Int64(cLow, cMid, cHigh);
-        }
-
-        //TODO Casts
-        public static explicit operator Int64(UInt64 a)
-        {
-            return new Int64(a.Low, a.Mid, a.High);
-        }
-
-        public static implicit operator Int64(Byte a)
-        {
-            return new Int64(a, 0, 0);
-        }
-
-        public static implicit operator Int64(SByte a)
-        {
-            return new Int64(a, a < 0 ? 0xffffff : 0, a < 0 ? 0xffff : 0);
-        }
-
-        public static implicit operator Int64(UInt16 a)
-        {
-            return new Int64(a, 0, 0);
-        }
-
-        public static implicit operator Int64(Int16 a)
-        {
-            return new Int64(a, a < 0 ? 0xffffff : 0, a < 0 ? 0xffff : 0);
-        }
-
-        public static implicit operator Int64(UInt32 a)
-        {
-            return new Int64((Int32)a, (Int32)(a >> 24), 0);
-        }
-
-		[InlineCode("console.log('yolo')")]
-        public static implicit operator Int64(Int32 a)
-        {
-            return new Int64(a, a >> 24, a < 0 ? 0xffff : 0);
-        }
-
-        public static explicit operator Int64(Double a)
-        {
-            Int64 r = (Int64)(UInt64)Math.Abs(a);
-            return a < 0 ? -r : r;
-        }
-
-        public static explicit operator Int64(Single a)
-        {
-            Int64 r = (Int64)(UInt64)Math.Abs(a);
-            return a < 0 ? -r : r;
-        }
-
-        public static Int64 FromDecimal(Decimal a)
-        {
-            Int64 r = (Int64)(UInt64.FromDecimal(Math.Abs(a)));
-            return a < 0 ? -r : r;
-        }
-
-        public static explicit operator Byte(Int64 a)
-        {
-            return (Byte)(a.Low & Byte.MaxValue);
-        }
-
-        public static explicit operator SByte(Int64 a)
-        {
-            return (SByte)(a.Low & Byte.MaxValue);
-        }
-
-        public static explicit operator UInt16(Int64 a)
-        {
-            return (UInt16)(a.Low & UInt16.MaxValue);
-        }
-
-        public static explicit operator Int16(Int64 a)
-        {
-            return (Int16)(a.Low & UInt16.MaxValue);
-        }
-
-        public static explicit operator UInt32(Int64 a)
-        {
-            //return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
-            // return (a.$low | a.$mid << 24) & 4294967295;
-            throw new NotImplementedException();
-        }
-
-        public static explicit operator Int32(Int64 a)
-        {
-            //return (Int32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
-            // return (a.$low | a.$mid << 24) & 4294967295;
-            throw new NotImplementedException();
-        }
-
-        public static explicit operator Double(Int64 a)
-        {
-            return a.IsNegative
-                ? -(Double)(UInt64)(-a)
-                : (Double)(UInt64)a;
-        }
-
-        public static explicit operator Single(Int64 a)
-        {
-            return a.IsNegative
-                ? -(Single)(UInt64)(-a)
-                : (Single)(UInt64)a;
-        }
-
-        public static Decimal ToDecimal(Int64 a)
-        {
-            return a.IsNegative
-                ? -UInt64.ToDecimal((UInt64)(-a))
-                : UInt64.ToDecimal((UInt64)a);
-        }
+		private const int Mask = unchecked((int)0xffffff000000);
+		public static Int64 operator +(Int64 a, Int64 b)
+		{
+			int cLow = a.Low + b.Low;
+			int rLow = (cLow & Mask) >> 24;
+			int cMid = rLow + a.Mid + b.Mid;
+			int rMid = (cMid & Mask) >> 24;
+			int cHigh = rMid + a.High + b.High;
+
+			return new Int64(cLow, cMid, cHigh);
+		}
+
+		public static Int64 operator -(Int64 a, Int64 b)
+		{
+			int cLow = (a.Low - b.Low) | 0;
+			int rLow = 0;
+			if (cLow < 0)
+			{
+				cLow = 0x1000000 + cLow;
+				rLow = -1;
+			}
+			int cMid = (rLow + ((a.Mid - b.Mid) | 0)) | 0;
+			int rMid = 0;
+			if (cMid < 0)
+			{
+				cMid = 0x1000000 + cMid;
+				rMid = -1;
+			}
+			int cHigh = (rMid + ((a.High - b.High) | 0)) | 0;
+			if (cHigh < 0)
+			{
+				cHigh = 0x10000 + cHigh;
+			}
+
+			return new Int64(cLow, cMid, cHigh);
+		}
+
+		public static Int64 operator *(Int64 a, Int64 b)
+		{
+			if (a.Equals(Zero) || b.Equals(Zero))
+				return Zero;
+
+			if ((UInt64.FromInt64(a)) > (UInt64.FromInt64(b)))
+				return b * a;
+
+			Int64 c = Zero;
+
+			if ((a.Low & 1) == 1)
+			{
+				c = b;
+			}
+
+			UInt64 au = (UInt64.FromInt64(a));
+
+			while (au != UInt64.One)
+			{
+				au >>= 1;
+				b <<= 1;
+
+				if ((au.Low & 1) == 1)
+					c += b;
+			}
+
+			return c;
+		}
+
+		public static Int64 operator /(Int64 a, Int64 b)
+		{
+			if (b.Equals(Zero))
+				throw new DivideByZeroException();
+
+			if (a.Equals(Zero))
+				return Zero;
+
+			if (a.Equals(b))
+				return One;
+
+			bool negate = a.IsNegative != b.IsNegative;
+
+			UInt64 c = ((UInt64.FromInt64(a.Abs)) / (UInt64.FromInt64(b.Abs)));
+
+			return negate ? -FromUInt64(c) : FromUInt64(c);
+		}
+
+		public static Int64 operator %(Int64 a, Int64 b)
+		{
+			if (b.Equals(Zero))
+				throw new DivideByZeroException();
+
+			if (a.Equals(Zero))
+				return Zero;
+
+			if (a.Equals(b))
+				return Zero;
+
+			bool negate = a.IsNegative;
+
+			UInt64 c = ((UInt64.FromInt64(a.Abs)) % (UInt64.FromInt64(b.Abs)));
+
+			return negate ? -FromUInt64(c) : FromUInt64(c);
+		}
+
+		public static Int64 operator &(Int64 a, Int64 b)
+		{
+			return new Int64(a.Low & b.Low, a.Mid & b.Mid, a.High & b.High);
+		}
+
+		public static Int64 operator |(Int64 a, Int64 b)
+		{
+			return new Int64(a.Low | b.Low, a.Mid | b.Mid, a.High | b.High);
+		}
+
+		public static Int64 operator ^(Int64 a, Int64 b)
+		{
+			return new Int64(a.Low ^ b.Low, a.Mid ^ b.Mid, a.High ^ b.High);
+		}
+
+		public static Int64 operator <<(Int64 a, int b)
+		{
+			b = b & 63;
+			if (b == 0) return a;
+
+			int cLow, cMid, cHigh;
+
+			if (b <= 24)
+			{
+				cLow = (a.Low << b);
+				cMid = (a.Low >> (24 - b)) | (a.Mid << b);
+				cHigh = (a.Mid >> (24 - b)) | (a.High << b);
+			}
+			else if (b <= 48)
+			{
+				cLow = 0;
+				cMid = (a.Low << (b - 24));
+				cHigh = (a.Low >> (48 - b)) | (a.Mid << (b - 24));
+			}
+			else
+			{
+				cLow = 0;
+				cMid = 0;
+				cHigh = (a.Low << (b - 48));
+			}
+
+			return new Int64(cLow, cMid, cHigh);
+		}
+
+		public static Int64 operator >>(Int64 a, int b)
+		{
+			// Int64 (signed) uses arithmetic shift, UIn64 (unsigned) uses logical shift
+			b = b & 63;
+			if (b == 0) return a;
+
+			int aHigh = a.IsNegative ? unchecked((int)0xffff0000) | a.High : a.High;
+			int cLow, cMid, cHigh;
+
+			if (b <= 24)
+			{
+				cLow = (a.Mid << (24 - b)) | (a.Low >> b);
+				cMid = (aHigh << (24 - b)) | (a.Mid >> b);
+				cHigh = (aHigh >> b);
+			}
+			else if (b <= 48)
+			{
+				cLow = (aHigh << (48 - b)) | (a.Mid >> (b - 24));
+				cMid = (aHigh >> (b - 24));
+				cHigh = a.IsNegative ? 0xffff : 0;
+			}
+			else
+			{
+				cLow = (aHigh >> (b - 48));
+				cMid = a.IsNegative ? 0xffffff : 0;
+				cHigh = a.IsNegative ? 0xffff : 0;
+			}
+
+			return new Int64(cLow, cMid, cHigh);
+		}
+
+		public static bool operator ==(Int64 a, Int64 b)
+		{
+			return a.Equals(b);
+		}
+
+		public static bool operator !=(Int64 a, Int64 b)
+		{
+			return !a.Equals(b);
+		}
+
+		public static bool operator <=(Int64 a, Int64 b)
+		{
+			return a.IsNegative == b.IsNegative ? (UInt64.FromInt64(a)) <= (UInt64.FromInt64(b)) : a.IsNegative;
+		}
+
+		public static bool operator >=(Int64 a, Int64 b)
+		{
+			return a.IsNegative == b.IsNegative ? (UInt64.FromInt64(a)) >= (UInt64.FromInt64(b)) : b.IsNegative;
+		}
+
+		public static bool operator <(Int64 a, Int64 b)
+		{
+			return a.IsNegative == b.IsNegative ? (UInt64.FromInt64(a)) < (UInt64.FromInt64(b)) : a.IsNegative;
+		}
+
+		public static bool operator >(Int64 a, Int64 b)
+		{
+			return a.IsNegative == b.IsNegative ? (UInt64.FromInt64(a)) > (UInt64.FromInt64(b)) : b.IsNegative;
+		}
+
+		[InlineCode("{a}")]
+		public static Int64 operator +(Int64 a)
+		{
+			return a;
+		}
+
+		public static Int64 operator -(Int64 a)
+		{
+			return ~a + One;
+		}
+
+		public static Int64 operator ~(Int64 a)
+		{
+			return new Int64(~a.Low, ~a.Mid, ~a.High);
+		}
+
+		public static Int64 operator ++(Int64 a)
+		{
+			int cLow = a.Low + 1;
+			int rLow = (cLow & Mask) >> 24;
+			int cMid = rLow + a.Mid;
+			int rMid = (cMid & Mask) >> 24;
+			int cHigh = rMid + a.High;
+
+			return new Int64(cLow, cMid, cHigh);
+		}
+
+		public static Int64 operator --(Int64 a)
+		{
+			int cLow = (a.Low - 1) | 0;
+			int rLow = 0;
+			if (cLow < 0)
+			{
+				cLow = 0x1000000 + cLow;
+				rLow = -1;
+			}
+			int cMid = (rLow + a.Mid) | 0;
+			int rMid = 0;
+			if (cMid < 0)
+			{
+				cMid = 0x1000000 + cMid;
+				rMid = -1;
+			}
+			int cHigh = (rMid + a.High) | 0;
+			if (cHigh < 0)
+			{
+				cHigh = 0x10000 + cHigh;
+			}
+
+			return new Int64(cLow, cMid, cHigh);
+		}
+
+		public static Int64 FromUInt64(UInt64 a)
+		{
+			return new Int64(a.Low, a.Mid, a.High);
+		}
+
+		public static Int64 FromByte(Byte a)
+		{
+			return new Int64(a, 0, 0);
+		}
+
+		public static Int64 FromSByte(SByte a)
+		{
+			return new Int64(a, a < 0 ? 0xffffff : 0, a < 0 ? 0xffff : 0);
+		}
+
+		public static Int64 FromUInt16(UInt16 a)
+		{
+			return new Int64(a, 0, 0);
+		}
+
+		public static Int64 FromInt16(Int16 a)
+		{
+			return new Int64(a, a < 0 ? 0xffffff : 0, a < 0 ? 0xffff : 0);
+		}
+
+		public static Int64 FromUInt32(UInt32 a)
+		{
+			return new Int64((Int32)a, (Int32)(a >> 24), 0);
+		}
+
+		public static Int64 FromInt32(Int32 a)
+		{
+			return new Int64(a, a >> 24, a < 0 ? 0xffff : 0);
+		}
+
+		public static Int64 FromDouble(Double a)
+		{
+			Int64 r = FromUInt64(UInt64.FromDouble(Math.Abs(a)));
+			return a < 0 ? -r : r;
+		}
+
+		public static Int64 FromSingle(Single a)
+		{
+			Int64 r = FromUInt64(UInt64.FromDouble(Math.Abs(a)));
+			return a < 0 ? -r : r;
+		}
+
+		public static Int64 FromDecimal(Decimal a)
+		{
+			Int64 r = FromUInt64((UInt64.FromDecimal(Math.Abs(a))));
+			return a < 0 ? -r : r;
+		}
+
+		public static Byte ToByte(Int64 a)
+		{
+			return (Byte)(a.Low & Byte.MaxValue);
+		}
+
+		public static SByte ToSByte(Int64 a)
+		{
+			return (SByte)(a.Low & Byte.MaxValue);
+		}
+
+		public static UInt16 ToUInt16(Int64 a)
+		{
+			return (UInt16)(a.Low & UInt16.MaxValue);
+		}
+
+		public static Int16 ToInt16(Int64 a)
+		{
+			return (Int16)(a.Low & UInt16.MaxValue);
+		}
+
+		public static UInt32 ToUInt32(Int64 a)
+		{
+			//return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
+			// return (a.$low | a.$mid << 24) & 4294967295;
+			throw new NotImplementedException();
+		}
+
+		public static Int32 ToInt32(Int64 a)
+		{
+			//return (Int32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
+			// return (a.$low | a.$mid << 24) & 4294967295;
+			throw new NotImplementedException();
+		}
+
+		public static Double ToDouble(Int64 a)
+		{
+			return a.IsNegative
+				? -(UInt64.ToDouble(UInt64.FromInt64(-a)))
+				: (UInt64.ToDouble(UInt64.FromInt64(a)));
+		}
+
+		public static Single ToSingle(Int64 a)
+		{
+			return a.IsNegative
+				? -(UInt64.ToSingle(UInt64.FromInt64(-a)))
+				: (UInt64.ToSingle(UInt64.FromInt64(a)));
+		}
+
+		public static Decimal ToDecimal(Int64 a)
+		{
+			return a.IsNegative
+				? (-UInt64.ToDecimal(UInt64.FromInt64(-a)))
+				: (UInt64.ToDecimal((UInt64.FromInt64(a))));
+		}
     }
 }
 

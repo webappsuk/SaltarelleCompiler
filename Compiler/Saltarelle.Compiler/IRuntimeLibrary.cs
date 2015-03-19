@@ -78,10 +78,220 @@ namespace Saltarelle.Compiler {
 		JsExpression IntegerDivision(JsExpression numerator, JsExpression denominator, IRuntimeContext context);
 
 		/// <summary>
+		/// Returns an expression that will perform unsigned integer addition.
+		/// </summary>
+		JsExpression UInt64Addition(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform integer addition.
+		/// </summary>
+		JsExpression Int64Addition(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform unsigned integer subtraction.
+		/// </summary>
+		JsExpression UInt64Subtraction(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform integer subtraction.
+		/// </summary>
+		JsExpression Int64Subtraction(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform unsigned integer multiplication.
+		/// </summary>
+		JsExpression UInt64Multiplication(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform integer multiplication.
+		/// </summary>
+		JsExpression Int64Multiplication(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform unsigned integer division.
+		/// </summary>
+		JsExpression UInt64Division(JsExpression numerator, JsExpression denominator, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform integer division.
+		/// </summary>
+		JsExpression Int64Division(JsExpression numerator, JsExpression denominator, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform unsigned integer modulo.
+		/// </summary>
+		JsExpression UInt64Modulus(JsExpression numerator, JsExpression denominator, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform integer modulo.
+		/// </summary>
+		JsExpression Int64Modulus(JsExpression numerator, JsExpression denominator, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform unsigned integer and.
+		/// </summary>
+		JsExpression UInt64BitwiseAnd(JsExpression operand, JsExpression denominator, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform integer and.
+		/// </summary>
+		JsExpression Int64BitwiseAnd(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform unsigned integer or.
+		/// </summary>
+		JsExpression UInt64BitwiseOr(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform integer or.
+		/// </summary>
+		JsExpression Int64BitwiseOr(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform unsigned integer xor.
+		/// </summary>
+		JsExpression UInt64ExclusiveOr(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform integer xor.
+		/// </summary>
+		JsExpression Int64ExclusiveOr(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform unsigned integer not.
+		/// </summary>
+		JsExpression UInt64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform integer not.
+		/// </summary>
+		JsExpression Int64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform unsigned integer negation.
+		/// </summary>
+		JsExpression UInt64Negation(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform integer negation.
+		/// </summary>
+		JsExpression Int64Negation(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
 		/// Returns an expression that converts a floating-point number to an integer.
 		/// </summary>
 		JsExpression FloatToInt(JsExpression operand, IRuntimeContext context);
 
+		/// <summary>
+		/// Returns an expression that converts a UInt32 to a 64 bit integer.
+		/// </summary>
+		JsExpression Int64FromUInt32(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Int32 to a 64 bit integer.
+		/// </summary>
+		JsExpression Int64FromInt32(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a UInt64 to a 64 bit integer.
+		/// </summary>
+		JsExpression Int64FromUInt64(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Double to a 64 bit integer.
+		/// </summary>
+		JsExpression Int64FromDouble(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Single to a 64 bit integer.
+		/// </summary>
+		JsExpression Int64FromSingle(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Decimal to a 64 bit integer.
+		/// </summary>
+		JsExpression Int64FromDecimal(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a UInt32 to a 64 bit integer.
+		/// </summary>
+		JsExpression Int64ToUInt32(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Int32 to a 64 bit integer.
+		/// </summary>
+		JsExpression Int64ToInt32(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Double to a 64 bit integer.
+		/// </summary>
+		JsExpression Int64ToDouble(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Single to a 64 bit integer.
+		/// </summary>
+		JsExpression Int64ToSingle(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Decimal to a 64 bit integer.
+		/// </summary>
+		JsExpression Int64ToDecimal(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a UInt32 to an unsigned 64 bit integer.
+		/// </summary>
+		JsExpression UInt64FromUInt32(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Int32 to an unsigned 64 bit integer.
+		/// </summary>
+		JsExpression UInt64FromInt32(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Int64 to an unsigned 64 bit integer.
+		/// </summary>
+		JsExpression UInt64FromInt64(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Double to an unsigned 64 bit integer.
+		/// </summary>
+		JsExpression UInt64FromDouble(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Single to an unsigned 64 bit integer.
+		/// </summary>
+		JsExpression UInt64FromSingle(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Decimal to an unsigned 64 bit integer.
+		/// </summary>
+		JsExpression UInt64FromDecimal(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a UInt32 to an unsigned 64 bit integer.
+		/// </summary>
+		JsExpression UInt64ToUInt32(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Int32 to an unsigned 64 bit integer.
+		/// </summary>
+		JsExpression UInt64ToInt32(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Double to an unsigned 64 bit integer.
+		/// </summary>
+		JsExpression UInt64ToDouble(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Single to an unsigned 64 bit integer.
+		/// </summary>
+		JsExpression UInt64ToSingle(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that converts a Decimal to an unsigned 64 bit integer.
+		/// </summary>
+		JsExpression UInt64ToDecimal(JsExpression operand, IRuntimeContext context);
+		
 		/// <summary>
 		/// Returns an expression that will perform null coalesce (C#: a ?? b).
 		/// </summary>

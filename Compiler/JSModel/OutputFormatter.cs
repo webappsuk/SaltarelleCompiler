@@ -145,7 +145,10 @@ namespace Saltarelle.Compiler.JSModel
 					_cb.Append(expression.NumberValue.ToString(CultureInfo.InvariantCulture));
 					break;
 				case ExpressionNodeType.Long:
-					_cb.Append(expression.LongValue.ToString(CultureInfo.InvariantCulture));
+					AppendLongConstructor((ulong) expression.LongValue, false);
+					break;
+				case ExpressionNodeType.ULong:
+					AppendLongConstructor((ulong)expression.ULongValue, true);
 					break;
 				case ExpressionNodeType.Regexp:
 					_cb.Append(expression.RegexpValue.Pattern.EscapeJavascriptRegexStringLiteral() + expression.RegexpValue.Options);
@@ -160,6 +163,22 @@ namespace Saltarelle.Compiler.JSModel
 					throw new ArgumentException("expression");
 			}
 			return null;
+		}
+
+		private CodeBuilder AppendLongConstructor(ulong value, bool unsigned) {
+			int low = (int) (value & 0xffffff);
+			int mid = (int) ((value >> 24) & 0xffffff);
+			int high = (int) ((value >> 48) & 0xffff);
+
+			return _cb.Append("new ss.")
+				.Append(unsigned ? "UInt64" : "Int64")
+				.Append("(")
+				.Append(low.ToString(CultureInfo.InvariantCulture))
+				.Append(",")
+				.Append(mid.ToString(CultureInfo.InvariantCulture))
+				.Append(",")
+				.Append(high.ToString(CultureInfo.InvariantCulture))
+				.Append(")");
 		}
 
 		public object VisitFunctionDefinitionExpression(JsFunctionDefinitionExpression expression, bool parenthesized) {
@@ -427,6 +446,8 @@ namespace Saltarelle.Compiler.JSModel
 					return PrecedenceConditional;
 
 				case ExpressionNodeType.Number:
+				case ExpressionNodeType.Long:
+				case ExpressionNodeType.ULong:
 				case ExpressionNodeType.String:
 				case ExpressionNodeType.Regexp:
 				case ExpressionNodeType.Null:
@@ -469,10 +490,7 @@ namespace Saltarelle.Compiler.JSModel
 					
 				case ExpressionNodeType.Literal:
 					return PrecedenceLiteral;
-
-				case ExpressionNodeType.Long:
-					return PrecedenceTerminal;
-
+					
 				default:
 					throw new ArgumentException("nodeType");
 			}

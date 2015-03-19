@@ -61,8 +61,218 @@ namespace Saltarelle.Compiler.Decorators {
 			return _prev.IntegerDivision(numerator, denominator, context);
 		}
 
+		public virtual JsExpression UInt64Addition(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64Addition(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64Addition(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64Addition(operand, operand2, context);
+		}
+
+		public virtual JsExpression UInt64Subtraction(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64Subtraction(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64Subtraction(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64Subtraction(operand, operand2, context);
+		}
+
+		public virtual JsExpression UInt64Multiplication(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64Multiplication(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64Multiplication(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64Multiplication(operand, operand2, context);
+		}
+
+		public virtual JsExpression UInt64Division(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return _prev.UInt64Division(numerator, denominator, context);
+		}
+
+		public virtual JsExpression Int64Division(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return _prev.Int64Division(numerator, denominator, context);
+		}
+
+		public virtual JsExpression UInt64Modulus(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return _prev.UInt64Modulus(numerator, denominator, context);
+		}
+
+		public virtual JsExpression Int64Modulus(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
+		{
+			return _prev.Int64Division(numerator, denominator, context);
+		}
+		
+		public virtual JsExpression UInt64BitwiseAnd(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64BitwiseAnd(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64BitwiseAnd(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64BitwiseAnd(operand, operand2, context);
+		}
+		
+		public virtual JsExpression UInt64BitwiseOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64BitwiseOr(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64BitwiseOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64BitwiseOr(operand, operand2, context);
+		}
+
+		public virtual JsExpression UInt64ExclusiveOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64ExclusiveOr(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64ExclusiveOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64ExclusiveOr(operand, operand2, context);
+		}
+
+		public virtual JsExpression UInt64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64OnesComplement(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64OnesComplement(operand, operand2, context);
+		}
+
+		public virtual JsExpression UInt64Negation(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64Negation(operand, context);
+		}
+
+		public virtual JsExpression Int64Negation(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64Negation(operand, context);
+		}
+
 		public virtual JsExpression FloatToInt(JsExpression operand, IRuntimeContext context) {
 			return _prev.FloatToInt(operand, context);
+		}
+
+		public JsExpression Int64FromUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64FromUInt32(operand, context);
+		}
+
+		public JsExpression Int64FromInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64FromInt32(operand, context);
+		}
+
+		public JsExpression Int64FromUInt64(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64FromUInt64(operand, context);
+		}
+
+		public JsExpression Int64FromDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64FromDouble(operand, context);
+		}
+
+		public JsExpression Int64FromSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64FromSingle(operand, context);
+		}
+
+		public JsExpression Int64FromDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64FromDecimal(operand, context);
+		}
+
+		public JsExpression Int64ToUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64ToUInt32(operand, context);
+		}
+
+		public JsExpression Int64ToInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64ToInt32(operand, context);
+		}
+
+		public JsExpression Int64ToDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64ToDouble(operand, context);
+		}
+
+		public JsExpression Int64ToSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64ToSingle(operand, context);
+		}
+
+		public JsExpression Int64ToDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64ToDecimal(operand, context);
+		}
+
+		public JsExpression UInt64FromUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64FromUInt32(operand, context);
+		}
+
+		public JsExpression UInt64FromInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64FromInt32(operand, context);
+		}
+
+		public JsExpression UInt64FromInt64(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64FromInt64(operand, context);
+		}
+
+		public JsExpression UInt64FromDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64FromDouble(operand, context);
+		}
+
+		public JsExpression UInt64FromSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64FromSingle(operand, context);
+		}
+
+		public JsExpression UInt64FromDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64FromDecimal(operand, context);
+		}
+
+		public JsExpression UInt64ToUInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64ToUInt32(operand, context);
+		}
+
+		public JsExpression UInt64ToInt32(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64ToInt32(operand, context);
+		}
+
+		public JsExpression UInt64ToDouble(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64ToDouble(operand, context);
+		}
+
+		public JsExpression UInt64ToSingle(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64ToSingle(operand, context);
+		}
+
+		public JsExpression UInt64ToDecimal(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64ToDecimal(operand, context);
 		}
 
 		public virtual JsExpression Coalesce(JsExpression a, JsExpression b, IRuntimeContext context) {

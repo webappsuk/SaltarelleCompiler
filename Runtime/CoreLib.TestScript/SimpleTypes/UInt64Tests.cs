@@ -9,7 +9,7 @@ namespace CoreLib.TestScript.SimpleTypes {
 		public void TypePropertiesAreCorrect() {
 			Assert.IsTrue((object)(ulong)0 is ulong);
 			Assert.IsFalse((object)0.5 is ulong);
-			Assert.AreEqual(typeof(ulong).FullName, "ss.Int32");
+			Assert.AreEqual(typeof(ulong).FullName, "ss.UInt64");
 			Assert.IsFalse(typeof(ulong).IsClass);
 			Assert.IsTrue(typeof(IComparable<ulong>).IsAssignableFrom(typeof(ulong)));
 			Assert.IsTrue(typeof(IEquatable<ulong>).IsAssignableFrom(typeof(ulong)));
@@ -86,7 +86,7 @@ namespace CoreLib.TestScript.SimpleTypes {
 
 		[Test]
 		public void DivisionOfLargeUInt64Works() {
-			ulong v1 = 50000000000L, v2 = 3;
+			ulong v1 = 50000000000UL, v2 = 3;
 			Assert.AreEqual(v1 / v2,  16666666666);
 		}
 

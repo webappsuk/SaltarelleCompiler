@@ -318,6 +318,8 @@ namespace Saltarelle.Compiler.Compiler {
 					value = JsExpression.Number((double)o);
 				else if (o is long)
 					value = JsExpression.Long((long)o);
+				else if (o is ulong)
+					value = JsExpression.ULong((ulong)o);
 				else if (o is bool)
 					value = JsExpression.Boolean((bool)o);
 				else
