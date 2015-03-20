@@ -256,14 +256,10 @@ ss_Int64.fromDecimal = function (a) {
 	return ((a < 0) ? ss_Int64.op_UnaryNegation(r) : r);
 };
 ss_Int64.toUInt32 = function (a) {
-	//return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
-	// return (a.$low | a.$mid << 24) & 4294967295;
-	throw new ss.NotImplementedException();
+	return (a.$low | a.$mid << 24) & -1;
 };
 ss_Int64.toInt32 = function (a) {
-	//return (Int32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
-	// return (a.$low | a.$mid << 24) & 4294967295;
-	throw new ss.NotImplementedException();
+	return (a.$low | a.$mid << 24) & -1;
 };
 ss_Int64.toDouble = function (a) {
 	return (a.get_$isNegative() ? -ss_UInt64.toDouble(ss_UInt64.fromInt64(ss_Int64.op_UnaryNegation(a))) : ss_UInt64.toDouble(ss_UInt64.fromInt64(a)));

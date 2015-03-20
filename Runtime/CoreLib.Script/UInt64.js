@@ -355,14 +355,10 @@ ss_UInt64.fromDecimal = function (a) {
 	return ss_UInt64.fromDouble(a);
 };
 ss_UInt64.toUInt32 = function (a) {
-	//return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
-	// return (a.$low | a.$mid << 24) & 4294967295;
-	throw new ss.NotImplementedException();
+	return (a.$low | a.$mid << 24) & 4294967295;
 };
 ss_UInt64.toInt32 = function (a) {
-	//return (UInt32)((a.Low | a.Mid << 24) & UInt32.MaxValue);
-	// return (a.$low | a.$mid << 24) & 4294967295;
-	throw new ss.NotImplementedException();
+	return (a.$low | a.$mid << 24) & 4294967295;
 };
 ss_UInt64.toDouble = function (a) {
 	return 16777216 * (16777216 * a.$high + a.$mid) + a.$low;

@@ -158,15 +158,85 @@ namespace Saltarelle.Compiler {
 		JsExpression Int64ExclusiveOr(JsExpression operand, JsExpression operand2, IRuntimeContext context);
 
 		/// <summary>
-		/// Returns an expression that will perform unsigned integer not.
+		/// Returns an expression that will perform a left shift on an unsigned integer.
 		/// </summary>
-		JsExpression UInt64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+		JsExpression UInt64LeftShift(JsExpression operand, JsExpression operand2, IRuntimeContext context);
 
 		/// <summary>
-		/// Returns an expression that will perform integer not.
+		/// Returns an expression that will perform a left shift on an integer.
 		/// </summary>
-		JsExpression Int64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+		JsExpression Int64LeftShift(JsExpression operand, JsExpression operand2, IRuntimeContext context);
 
+		/// <summary>
+		/// Returns an expression that will perform a left shift on an unsigned integer.
+		/// </summary>
+		JsExpression UInt64RightShift(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform a left shift on an integer.
+		/// </summary>
+		JsExpression Int64RightShift(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an equality on two unsigned integers.
+		/// </summary>
+		JsExpression UInt64Equality(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an equality on two integers.
+		/// </summary>
+		JsExpression Int64Equality(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an inequality on two unsigned integers.
+		/// </summary>
+		JsExpression UInt64Inequality(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an inequality on two integers.
+		/// </summary>
+		JsExpression Int64Inequality(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an equality on two unsigned integers.
+		/// </summary>
+		JsExpression UInt64LessThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an equality on two integers.
+		/// </summary>
+		JsExpression Int64LessThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an inequality on two unsigned integers.
+		/// </summary>
+		JsExpression UInt64GreaterThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an inequality on two integers.
+		/// </summary>
+		JsExpression Int64GreaterThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an equality on two unsigned integers.
+		/// </summary>
+		JsExpression UInt64LessThan(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an equality on two integers.
+		/// </summary>
+		JsExpression Int64LessThan(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an inequality on two unsigned integers.
+		/// </summary>
+		JsExpression UInt64GreaterThan(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform an inequality on two integers.
+		/// </summary>
+		JsExpression Int64GreaterThan(JsExpression operand, JsExpression operand2, IRuntimeContext context);
+		
 		/// <summary>
 		/// Returns an expression that will perform unsigned integer negation.
 		/// </summary>
@@ -176,6 +246,36 @@ namespace Saltarelle.Compiler {
 		/// Returns an expression that will perform integer negation.
 		/// </summary>
 		JsExpression Int64Negation(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform unsigned integer not.
+		/// </summary>
+		JsExpression UInt64OnesComplement(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will perform integer not.
+		/// </summary>
+		JsExpression Int64OnesComplement(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will increment an unsigned integer.
+		/// </summary>
+		JsExpression UInt64Increment(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will increment an integer.
+		/// </summary>
+		JsExpression Int64Increment(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will decrement an unsigned integer.
+		/// </summary>
+		JsExpression UInt64Decrement(JsExpression operand, IRuntimeContext context);
+
+		/// <summary>
+		/// Returns an expression that will decrement an integer.
+		/// </summary>
+		JsExpression Int64Decrement(JsExpression operand, IRuntimeContext context);
 
 		/// <summary>
 		/// Returns an expression that converts a floating-point number to an integer.

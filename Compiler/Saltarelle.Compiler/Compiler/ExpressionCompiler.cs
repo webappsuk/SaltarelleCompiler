@@ -785,9 +785,13 @@ namespace Saltarelle.Compiler.Compiler {
 					return CompileCompoundAssignment(rr.Operands[0], rr.Operands[1], JsExpression.BitwiseXorAssign, JsExpression.BitwiseXor, returnValueIsImportant, rr.IsLiftedOperator);
 
 				case ExpressionType.LeftShiftAssign:
-					if (Is64BitType(rr.Operands[0].Type)) {
-						_errorReporter.Message(Messages._7540);
-						return JsExpression.Null;
+					if (rr.Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileCompoundAssignment(rr.Operands[0], rr.Operands[1], null, (a, b) => _runtimeLibrary.Int64LeftShift(a, b, this), returnValueIsImportant, rr.IsLiftedOperator);
+					}
+					if (rr.Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileCompoundAssignment(rr.Operands[0], rr.Operands[1], null, (a, b) => _runtimeLibrary.UInt64LeftShift(a, b, this), returnValueIsImportant, rr.IsLiftedOperator);
 					}
 					return CompileCompoundAssignment(rr.Operands[0], rr.Operands[1], JsExpression.LeftShiftAssign, JsExpression.LeftShift, returnValueIsImportant, rr.IsLiftedOperator);
 
@@ -828,9 +832,13 @@ namespace Saltarelle.Compiler.Compiler {
 						return CompileCompoundAssignment(rr.Operands[0], rr.Operands[1], JsExpression.BitwiseOrAssign, JsExpression.BitwiseOr, returnValueIsImportant, rr.IsLiftedOperator);
 
 				case ExpressionType.RightShiftAssign:
-					if (Is64BitType(rr.Operands[0].Type)) {
-						_errorReporter.Message(Messages._7540);
-						return JsExpression.Null;
+					if (rr.Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileCompoundAssignment(rr.Operands[0], rr.Operands[1], null, (a, b) => _runtimeLibrary.Int64RightShift(a, b, this), returnValueIsImportant, rr.IsLiftedOperator);
+					}
+					if (rr.Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileCompoundAssignment(rr.Operands[0], rr.Operands[1], null, (a, b) => _runtimeLibrary.UInt64RightShift(a, b, this), returnValueIsImportant, rr.IsLiftedOperator);
 					}
 
 					if (IsUnsignedType(rr.Type))
@@ -861,15 +869,45 @@ namespace Saltarelle.Compiler.Compiler {
 					}
 
 				case ExpressionType.PreIncrementAssign:
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PrefixPlusPlus(a), (a, b) => _runtimeLibrary.Int64Increment(a, this), returnValueIsImportant, rr.IsLiftedOperator, returnValueBeforeChange: true);
+					}
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PrefixPlusPlus(a), (a, b) => _runtimeLibrary.UInt64Increment(a, this), returnValueIsImportant, rr.IsLiftedOperator, returnValueBeforeChange: true);
+					}
 					return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PrefixPlusPlus(a), (a, b) => JsExpression.Add(a, JsExpression.Number(1)), returnValueIsImportant, rr.IsLiftedOperator);
 
-				case ExpressionType.PreDecrementAssign:
+				case ExpressionType.PreDecrementAssign: if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PrefixMinusMinus(a), (a, b) => _runtimeLibrary.Int64Decrement(a, this), returnValueIsImportant, rr.IsLiftedOperator, returnValueBeforeChange: true);
+					}
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PrefixMinusMinus(a), (a, b) => _runtimeLibrary.UInt64Decrement(a, this), returnValueIsImportant, rr.IsLiftedOperator, returnValueBeforeChange: true);
+					}
 					return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PrefixMinusMinus(a), (a, b) => JsExpression.Subtract(a, JsExpression.Number(1)), returnValueIsImportant, rr.IsLiftedOperator);
 
 				case ExpressionType.PostIncrementAssign:
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.Int64)) {
+						return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PostfixPlusPlus(a), (a, b) => _runtimeLibrary.Int64Increment(a, this), returnValueIsImportant, rr.IsLiftedOperator, returnValueBeforeChange: true);
+					}
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PostfixPlusPlus(a), (a, b) => _runtimeLibrary.UInt64Increment(a, this), returnValueIsImportant, rr.IsLiftedOperator, returnValueBeforeChange: true);
+					}
 					return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PostfixPlusPlus(a), (a, b) => JsExpression.Add(a, JsExpression.Number(1)), returnValueIsImportant, rr.IsLiftedOperator, returnValueBeforeChange: true);
 
 				case ExpressionType.PostDecrementAssign:
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PostfixMinusMinus(a), (a, b) => _runtimeLibrary.Int64Decrement(a, this), returnValueIsImportant, rr.IsLiftedOperator, returnValueBeforeChange: true);
+					}
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PostfixMinusMinus(a), (a, b) => _runtimeLibrary.UInt64Decrement(a, this), returnValueIsImportant, rr.IsLiftedOperator, returnValueBeforeChange: true);
+					}
 					return CompileCompoundAssignment(rr.Operands[0], null, (a, b) => JsExpression.PostfixMinusMinus(a), (a, b) => JsExpression.Subtract(a, JsExpression.Number(1)), returnValueIsImportant, rr.IsLiftedOperator, returnValueBeforeChange: true);
 
 				// Binary non-assigning operators
@@ -940,26 +978,70 @@ namespace Saltarelle.Compiler.Compiler {
 					return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], JsExpression.BitwiseXor, rr.IsLiftedOperator);
 
 				case ExpressionType.GreaterThan:
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.Int64GreaterThan(a, b, this), false);
+					}
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.UInt64GreaterThan(a, b, this), false);
+					}
 					return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], JsExpression.Greater, rr.IsLiftedOperator);
 
 				case ExpressionType.GreaterThanOrEqual:
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.Int64GreaterThanOrEqual(a, b, this), false);
+					}
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.UInt64GreaterThanOrEqual(a, b, this), false);
+					}
 					return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], JsExpression.GreaterOrEqual, rr.IsLiftedOperator);
 
 				case ExpressionType.Equal:
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.Int64Equality(a, b, this), false);
+					}
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.UInt64Equality(a, b, this), false);
+					}
 					return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => CanDoSimpleComparisonForEquals(rr.Operands[0], rr.Operands[1]) ? JsExpression.Same(a, b) : _runtimeLibrary.ReferenceEquals(a, b, this), false);
 
 				case ExpressionType.LeftShift:
-					if (Is64BitType(rr.Operands[0].Type)) {
-						_errorReporter.Message(Messages._7540);
-						return JsExpression.Null;
+					if (rr.Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.Int64LeftShift(a, b, this), false);
+					}
+					if (rr.Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.UInt64LeftShift(a, b, this), false);
 					}
 
 					return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], JsExpression.LeftShift, rr.IsLiftedOperator);
 
 				case ExpressionType.LessThan:
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.Int64GreaterThan(a, b, this), false);
+					}
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.UInt64GreaterThan(a, b, this), false);
+					}
 					return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], JsExpression.Lesser, rr.IsLiftedOperator);
 
 				case ExpressionType.LessThanOrEqual:
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.Int64LessThanOrEqual(a, b, this), false);
+					}
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.UInt64LessThanOrEqual(a, b, this), false);
+					}
 					return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], JsExpression.LesserOrEqual, rr.IsLiftedOperator);
 
 				case ExpressionType.Modulo:
@@ -982,6 +1064,14 @@ namespace Saltarelle.Compiler.Compiler {
 					return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], JsExpression.Multiply, rr.IsLiftedOperator);
 
 				case ExpressionType.NotEqual:
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.Int64Inequality(a, b, this), false);
+					}
+					if (rr.Operands[0].Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.UInt64Inequality(a, b, this), false);
+					}
 					return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => CanDoSimpleComparisonForEquals(rr.Operands[0], rr.Operands[1]) ? JsExpression.NotSame(a, b) : _runtimeLibrary.ReferenceNotEquals(a, b, this), false);
 
 				case ExpressionType.Or:
@@ -1003,9 +1093,13 @@ namespace Saltarelle.Compiler.Compiler {
 					return CompileAndAlsoOrOrElse(rr.Operands[0], rr.Operands[1], false);
 
 				case ExpressionType.RightShift:
-					if (Is64BitType(rr.Operands[0].Type)) {
-						_errorReporter.Message(Messages._7540);
-						return JsExpression.Null;
+					if (rr.Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.Int64RightShift(a, b, this), false);
+					}
+					if (rr.Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.UInt64RightShift(a, b, this), false);
 					}
 
 					var origType = rr.Operands[0] is ConversionResolveResult && rr.Operands[0].GetType().Name != "CastResolveResult" ? ((ConversionResolveResult)rr.Operands[0]).Input.Type : rr.Operands[0].Type;
@@ -1050,20 +1144,16 @@ namespace Saltarelle.Compiler.Compiler {
 					return CompileUnaryOperator(rr.Operands[0], JsExpression.Positive, rr.IsLiftedOperator);
 
 				case ExpressionType.Not:
-					if (rr.Type.IsKnownType(KnownTypeCode.Int64))
-					{
-						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.Int64OnesComplement(a, b, this), false);
-					}
-					if (rr.Type.IsKnownType(KnownTypeCode.UInt64))
-					{
-						return CompileBinaryNonAssigningOperator(rr.Operands[0], rr.Operands[1], (a, b) => _runtimeLibrary.UInt64OnesComplement(a, b, this), false);
-					}
 					return CompileUnaryOperator(rr.Operands[0], JsExpression.LogicalNot, rr.IsLiftedOperator);
 
 				case ExpressionType.OnesComplement:
-					if (Is64BitType(rr.Operands[0].Type)) {
-						_errorReporter.Message(Messages._7540);
-						return JsExpression.Null;
+					if (rr.Type.IsKnownType(KnownTypeCode.Int64))
+					{
+						return CompileUnaryOperator(rr.Operands[0], a => _runtimeLibrary.Int64OnesComplement(a, this), false);
+					}
+					if (rr.Type.IsKnownType(KnownTypeCode.UInt64))
+					{
+						return CompileUnaryOperator(rr.Operands[0], a => _runtimeLibrary.UInt64OnesComplement(a, this), false);
 					}
 
 					return CompileUnaryOperator(rr.Operands[0], JsExpression.BitwiseNot, rr.IsLiftedOperator);
@@ -1077,6 +1167,9 @@ namespace Saltarelle.Compiler.Compiler {
 				case ExpressionType.PowerAssign:
 				case ExpressionType.Increment:
 				case ExpressionType.Decrement:
+					_errorReporter.InternalError("Unsupported operator " + rr.OperatorType);
+					return JsExpression.Null;
+
 				default:
 					_errorReporter.InternalError("Unsupported operator " + rr.OperatorType);
 					return JsExpression.Null;

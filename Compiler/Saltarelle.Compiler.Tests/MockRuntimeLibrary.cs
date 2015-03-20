@@ -98,10 +98,30 @@ namespace Saltarelle.Compiler.Tests {
 		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64BitwiseOr { get; set; }
 		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64ExclusiveOr { get; set; }
 		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64ExclusiveOr { get; set; }
-		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64OnesComplement { get; set; }
-		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64OnesComplement { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64LeftShift { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64LeftShift { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64RightShift { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64RightShift { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64Equality { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64Equality { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64Inequality { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64Inequality { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64LessThanOrEqual { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64LessThanOrEqual { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64GreaterThanOrEqual { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64GreaterThanOrEqual { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64LessThan { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64LessThan { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> UInt64GreaterThan { get; set; }
+		public Func<JsExpression, JsExpression, IRuntimeContext, JsExpression> Int64GreaterThan { get; set; }
 		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64Negation { get; set; }
 		public Func<JsExpression, IRuntimeContext, JsExpression> Int64Negation { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64OnesComplement { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64OnesComplement { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64Increment { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64Increment { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> UInt64Decrement { get; set; }
+		public Func<JsExpression, IRuntimeContext, JsExpression> Int64Decrement { get; set; }
 		public Func<JsExpression, IRuntimeContext, JsExpression> FloatToInt { get; set; }
 		public Func<JsExpression, IRuntimeContext, JsExpression> Int64FromUInt32 { get; set; }
 		public Func<JsExpression, IRuntimeContext, JsExpression> Int64FromInt32 { get; set; }
@@ -307,14 +327,85 @@ namespace Saltarelle.Compiler.Tests {
 			return Int64ExclusiveOr(operand, operand2, context);
 		}
 
-		JsExpression IRuntimeLibrary.UInt64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		JsExpression IRuntimeLibrary.UInt64LeftShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
 		{
-			return UInt64OnesComplement(operand, operand2, context);
+			return UInt64LeftShift(operand, operand2, context);
 		}
 
-		JsExpression IRuntimeLibrary.Int64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		JsExpression IRuntimeLibrary.Int64LeftShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
 		{
-			return Int64OnesComplement(operand, operand2, context);
+			return Int64LeftShift(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64RightShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64RightShift(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64RightShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64RightShift(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64Equality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64Equality(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64Equality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64Equality(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64Inequality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64Inequality(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64Inequality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64Inequality(operand, operand2, context);
+		}
+
+
+		JsExpression IRuntimeLibrary.UInt64LessThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64LessThanOrEqual(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64LessThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64LessThanOrEqual(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64GreaterThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64GreaterThanOrEqual(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64GreaterThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64GreaterThanOrEqual(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64LessThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64LessThan(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64LessThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64LessThan(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64GreaterThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return UInt64GreaterThan(operand, operand2, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64GreaterThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return Int64GreaterThan(operand, operand2, context);
 		}
 
 		JsExpression IRuntimeLibrary.UInt64Negation(JsExpression operand, IRuntimeContext context)
@@ -325,6 +416,36 @@ namespace Saltarelle.Compiler.Tests {
 		JsExpression IRuntimeLibrary.Int64Negation(JsExpression operand, IRuntimeContext context)
 		{
 			return Int64Negation(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64OnesComplement(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64OnesComplement(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64OnesComplement(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64OnesComplement(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64Increment(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64Increment(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64Increment(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64Increment(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.UInt64Decrement(JsExpression operand, IRuntimeContext context)
+		{
+			return UInt64Decrement(operand, context);
+		}
+
+		JsExpression IRuntimeLibrary.Int64Decrement(JsExpression operand, IRuntimeContext context)
+		{
+			return Int64Decrement(operand, context);
 		}
 
 		JsExpression IRuntimeLibrary.FloatToInt(JsExpression operand, IRuntimeContext context) {

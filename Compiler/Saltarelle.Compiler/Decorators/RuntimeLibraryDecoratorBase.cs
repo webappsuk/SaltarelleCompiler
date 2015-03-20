@@ -141,14 +141,85 @@ namespace Saltarelle.Compiler.Decorators {
 			return _prev.Int64ExclusiveOr(operand, operand2, context);
 		}
 
-		public virtual JsExpression UInt64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		public virtual JsExpression UInt64LeftShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
 		{
-			return _prev.UInt64OnesComplement(operand, operand2, context);
+			return _prev.UInt64LeftShift(operand, operand2, context);
 		}
 
-		public virtual JsExpression Int64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		public virtual JsExpression Int64LeftShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
 		{
-			return _prev.Int64OnesComplement(operand, operand2, context);
+			return _prev.Int64LeftShift(operand, operand2, context);
+		}
+
+		public virtual JsExpression UInt64RightShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64RightShift(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64RightShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64RightShift(operand, operand2, context);
+		}
+
+		public virtual JsExpression UInt64Equality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64Equality(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64Equality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64Equality(operand, operand2, context);
+		}
+		
+		public virtual JsExpression UInt64Inequality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64Inequality(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64Inequality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64Inequality(operand, operand2, context);
+		}
+
+
+		public virtual JsExpression UInt64LessThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64LessThanOrEqual(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64LessThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64LessThanOrEqual(operand, operand2, context);
+		}
+
+		public virtual JsExpression UInt64GreaterThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64GreaterThanOrEqual(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64GreaterThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64GreaterThanOrEqual(operand, operand2, context);
+		}
+
+		public virtual JsExpression UInt64LessThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64LessThan(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64LessThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64LessThan(operand, operand2, context);
+		}
+
+		public virtual JsExpression UInt64GreaterThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.UInt64GreaterThan(operand, operand2, context);
+		}
+
+		public virtual JsExpression Int64GreaterThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return _prev.Int64GreaterThan(operand, operand2, context);
 		}
 
 		public virtual JsExpression UInt64Negation(JsExpression operand, IRuntimeContext context)
@@ -159,6 +230,36 @@ namespace Saltarelle.Compiler.Decorators {
 		public virtual JsExpression Int64Negation(JsExpression operand, IRuntimeContext context)
 		{
 			return _prev.Int64Negation(operand, context);
+		}
+
+		public virtual JsExpression UInt64OnesComplement(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64OnesComplement(operand, context);
+		}
+
+		public virtual JsExpression Int64OnesComplement(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64OnesComplement(operand, context);
+		}
+
+		public virtual JsExpression UInt64Increment(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64Increment(operand, context);
+		}
+
+		public virtual JsExpression Int64Increment(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64Increment(operand, context);
+		}
+
+		public virtual JsExpression UInt64Decrement(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.UInt64Decrement(operand, context);
+		}
+
+		public virtual JsExpression Int64Decrement(JsExpression operand, IRuntimeContext context)
+		{
+			return _prev.Int64Decrement(operand, context);
 		}
 
 		public virtual JsExpression FloatToInt(JsExpression operand, IRuntimeContext context) {

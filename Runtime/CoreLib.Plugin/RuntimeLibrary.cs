@@ -380,15 +380,85 @@ namespace CoreLib.Plugin {
 		{
 			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_ExculsiveOr"), operand, operand2);
 		}
-
-		public JsExpression UInt64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		
+		public JsExpression UInt64LeftShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
 		{
-			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_OnesComplement"), operand, operand2);
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_LeftShift"), operand, operand2);
 		}
 
-		public JsExpression Int64OnesComplement(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		public JsExpression Int64LeftShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
 		{
-			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_OnesComplement"), operand, operand2);
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_LeftShift"), operand, operand2);
+		}
+
+		public JsExpression UInt64RightShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_RightShift"), operand, operand2);
+		}
+
+		public JsExpression Int64RightShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_RightShift"), operand, operand2);
+		}
+
+		public JsExpression UInt64Equality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_Equality"), operand, operand2);
+		}
+
+		public JsExpression Int64Equality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_Equality"), operand, operand2);
+		}
+
+		public JsExpression UInt64Inequality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_Inequality"), operand, operand2);
+		}
+
+		public JsExpression Int64Inequality(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_Inequality"), operand, operand2);
+		}
+
+		public JsExpression UInt64LessThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_LessThanOrEqual"), operand, operand2);
+		}
+
+		public JsExpression Int64LessThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_LessThanOrEqual"), operand, operand2);
+		}
+
+		public JsExpression UInt64GreaterThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_GreaterThanOrEqual"), operand, operand2);
+		}
+
+		public JsExpression Int64GreaterThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_GreaterThanOrEqual"), operand, operand2);
+		}
+
+		public JsExpression UInt64LessThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_LessThan"), operand, operand2);
+		}
+
+		public JsExpression Int64LessThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_LessThan"), operand, operand2);
+		}
+
+		public JsExpression UInt64GreaterThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_GreaterThan"), operand, operand2);
+		}
+
+		public JsExpression Int64GreaterThan(JsExpression operand, JsExpression operand2, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_GreaterThan"), operand, operand2);
 		}
 
 		public JsExpression UInt64Negation(JsExpression operand, IRuntimeContext context)
@@ -399,6 +469,36 @@ namespace CoreLib.Plugin {
 		public JsExpression Int64Negation(JsExpression operand, IRuntimeContext context)
 		{
 			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_UnaryNegation"), operand);
+		}
+
+		public JsExpression UInt64OnesComplement(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_OnesComplement"), operand);
+		}
+
+		public JsExpression Int64OnesComplement(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_OnesComplement"), operand);
+		}
+		
+		public JsExpression UInt64Increment(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_Increment"), operand);
+		}
+
+		public JsExpression Int64Increment(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_Increment"), operand);
+		}
+		
+		public JsExpression UInt64Decrement(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_Decrement"), operand);
+		}
+
+		public JsExpression Int64Decrement(JsExpression operand, IRuntimeContext context)
+		{
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_Decrement"), operand);
 		}
 
 		public JsExpression FloatToInt(JsExpression operand, IRuntimeContext context) {
