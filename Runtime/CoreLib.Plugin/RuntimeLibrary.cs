@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -323,12 +324,12 @@ namespace CoreLib.Plugin {
 
 		public JsExpression UInt64Multiplication(JsExpression operand, JsExpression operand2, IRuntimeContext context)
 		{
-			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_Multiplication"), operand, operand2);
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_Multiply"), operand, operand2);
 		}
 
 		public JsExpression Int64Multiplication(JsExpression operand, JsExpression operand2, IRuntimeContext context)
 		{
-			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_Multiplication"), operand, operand2);
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_Multiply"), operand, operand2);
 		}
 
 		public JsExpression UInt64Division(JsExpression numerator, JsExpression denominator, IRuntimeContext context)
@@ -373,12 +374,12 @@ namespace CoreLib.Plugin {
 
 		public JsExpression UInt64ExclusiveOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
 		{
-			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_ExculsiveOr"), operand, operand2);
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.UInt64), "op_ExclusiveOr"), operand, operand2);
 		}
 
 		public JsExpression Int64ExclusiveOr(JsExpression operand, JsExpression operand2, IRuntimeContext context)
 		{
-			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_ExculsiveOr"), operand, operand2);
+			return JsExpression.Invocation(JsExpression.Member(CreateTypeReferenceExpression(KnownTypeReference.Int64), "op_ExclusiveOr"), operand, operand2);
 		}
 		
 		public JsExpression UInt64LeftShift(JsExpression operand, JsExpression operand2, IRuntimeContext context)
@@ -620,6 +621,8 @@ namespace CoreLib.Plugin {
 		}
 
 		public JsExpression Lift(JsExpression expression, IRuntimeContext context) {
+			//if (!Debugger.IsAttached) Debugger.Launch();
+
 			if (expression is JsInvocationExpression) {
 				var ie = (JsInvocationExpression)expression;
 				if (ie.Method is JsMemberAccessExpression) {

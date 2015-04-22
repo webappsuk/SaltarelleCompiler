@@ -33,6 +33,15 @@ namespace Saltarelle.Compiler {
 			return IsExternallyVisible(member.DeclaringType.GetDefinition()) && (member.Accessibility == Accessibility.Public || member.Accessibility == Accessibility.Protected || member.Accessibility == Accessibility.ProtectedOrInternal);
 		}
 
+		/// <summary>
+		/// Gets whether the type is the specified known type or a nullable of the specified type.
+		/// For generic known types, this returns true any parameterization of the type (and also for the definition itself).
+		/// </summary>
+		public static bool IsKnownTypeOrNullable(this IType type, KnownTypeCode knownType){
+			return type.IsKnownType(knownType) ||
+				   (type.IsKnownType(KnownTypeCode.NullableOfT) && type.TypeArguments[0].IsKnownType(knownType));
+		}
+
 		private static void FindTypeUsageErrors(IEnumerable<IType> types, IMetadataImporter metadataImporter, HashSet<ITypeDefinition> usedUnusableTypes, HashSet<ITypeDefinition> mutableValueTypesBoundToTypeArguments) {
 			foreach (var t in types) {
 				if (t is ITypeDefinition) {

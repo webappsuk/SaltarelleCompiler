@@ -41,6 +41,69 @@ namespace Saltarelle.Compiler.Tests {
 			InstantiateGenericMethod                        = (m, a, c)          => JsExpression.Invocation(JsExpression.Identifier("$InstantiateGenericMethod"), new[] { m }.Concat(a.Select(x => GetScriptType(x, TypeContext.GenericArgument, c.ResolveTypeParameter))));
 			MakeException                                   = (e, c)             => JsExpression.Invocation(JsExpression.Identifier("$MakeException"), e);
 			IntegerDivision                                 = (n, d, c)          => JsExpression.Invocation(JsExpression.Identifier("$IntDiv"), n, d);
+			UInt64Addition = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64Addition"), n, d);
+			Int64Addition = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64Addition"), n, d);
+			UInt64Subtraction = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64Subtraction"), n, d);
+			Int64Subtraction = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64Subtraction"), n, d);
+			UInt64Multiplication = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64Multiplicatio"), n, d);
+			Int64Multiplication = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64Multiplication"), n, d);
+			UInt64Division = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64Division"), n, d);
+			Int64Division = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64Division"), n, d);
+			UInt64Modulus = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64Modulus"), n, d);
+			Int64Modulus = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64Modulus"), n, d);
+			UInt64BitwiseAnd = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64BitwiseAnd"), n, d);
+			Int64BitwiseAnd = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64BitwiseAnd"), n, d);
+			UInt64BitwiseOr = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64BitwiseOr"), n, d);
+			Int64BitwiseOr = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64BitwiseOr"), n, d);
+			UInt64ExclusiveOr = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64ExclusiveOr"), n, d);
+			Int64ExclusiveOr = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64ExclusiveOr"), n, d);
+			UInt64LeftShift = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64LeftShift"), n, d);
+			Int64LeftShift = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64LeftShift"), n, d);
+			UInt64RightShift = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64RightShift"), n, d);
+			Int64RightShift = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64RightShift"), n, d);
+			UInt64Equality = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64Equality"), n, d);
+			Int64Equality = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64Equality"), n, d);
+			UInt64Inequality = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64Inequality"), n, d);
+			Int64Inequality = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64Inequality"), n, d);
+			UInt64LessThanOrEqual = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64LessThanOrEqual"), n, d);
+			Int64LessThanOrEqual = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64LessThanOrEqual"), n, d);
+			UInt64GreaterThanOrEqual = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64GreaterThanOrEqual"), n, d);
+			Int64GreaterThanOrEqual = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64GreaterThanOrEqual"), n, d);
+			UInt64LessThan = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64LessThan"), n, d);
+			Int64LessThan = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64LessThan"), n, d);
+			UInt64GreaterThan = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64GreaterThan"), n, d);
+			Int64GreaterThan = (n, d, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64GreaterThan"), n, d);
+			UInt64Negation = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64Negation"), n);
+			Int64Negation = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64Negation"), n);
+			UInt64OnesComplement = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64OnesComplement"), n);
+			Int64OnesComplement = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64OnesComplement"), n);
+			UInt64Increment = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64Increment"), n);
+			Int64Increment = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64Increment"), n);
+			UInt64Decrement = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64Decrement"), n);
+			Int64Decrement = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64Decrement"), n);
+			FloatToInt = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$FloatToInt"), n);
+			Int64FromUInt32 = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64FromUInt32"), n);
+			Int64FromInt32 = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64FromInt32"), n);
+			Int64FromUInt64 = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64FromUInt64"), n);
+			Int64FromDouble = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64FromDouble"), n);
+			Int64FromSingle = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64FromSingle"), n);
+			Int64FromDecimal = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64FromDecimal"), n);
+			Int64ToUInt32 = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64ToUInt32"), n);
+			Int64ToInt32 = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64ToInt32"), n);
+			Int64ToDouble = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64ToDouble"), n);
+			Int64ToSingle = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64ToSingle"), n);
+			Int64ToDecimal = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$Int64ToDecimal"), n);
+			UInt64FromUInt32 = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64FromUInt32"), n);
+			UInt64FromInt32 = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64FromInt32"), n);
+			UInt64FromInt64 = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64FromInt64"), n);
+			UInt64FromDouble = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64FromDouble"), n);
+			UInt64FromSingle = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64FromSingle"), n);
+			UInt64FromDecimal = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64FromDecimal"), n);
+			UInt64ToUInt32 = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64ToUInt32"), n);
+			UInt64ToInt32 = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64ToInt32"), n);
+			UInt64ToDouble = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64ToDouble"), n);
+			UInt64ToSingle = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64ToSingle"), n);
+			UInt64ToDecimal = (n, c) => JsExpression.Invocation(JsExpression.Identifier("$UInt64ToDecimal"), n);
 			FloatToInt                                      = (e, c)             => JsExpression.Invocation(JsExpression.Identifier("$Truncate"), e);
 			Coalesce                                        = (a, b, c)          => JsExpression.Invocation(JsExpression.Identifier("$Coalesce"), a, b);
 			Lift                                            = (e, c)             => JsExpression.Invocation(JsExpression.Identifier("$Lift"), e);
@@ -366,7 +429,6 @@ namespace Saltarelle.Compiler.Tests {
 		{
 			return Int64Inequality(operand, operand2, context);
 		}
-
 
 		JsExpression IRuntimeLibrary.UInt64LessThanOrEqual(JsExpression operand, JsExpression operand2, IRuntimeContext context)
 		{
