@@ -22,6 +22,21 @@ namespace Saltarelle.Compiler.Tests.CompilerTests.MethodCompilation.Expressions 
 		}
 
 		[Test]
+		public void AssignmentWorksForLocalVariablesLong()
+		{
+			AssertCorrect(
+@"public void M() {
+	long i = 0, j = 1;
+	// BEGIN
+	i = j;
+	// END
+}
+",
+@"	$i = $j;
+");
+		}
+
+		[Test]
 		public void AssignmentWorksForLocalVariablesStruct() {
 			AssertCorrect(
 @"public void M() {
@@ -67,6 +82,21 @@ public void M() {
 		}
 
 		[Test]
+		public void AssignmentChainWorksForLocalVariablesLong()
+		{
+			AssertCorrect(
+@"public void M() {
+	long i = 0, j = 1, k = 2;;
+	// BEGIN
+	i = j = k;
+	// END
+}
+",
+@"	$i = $j = $k;
+");
+		}
+
+		[Test]
 		public void AssignmentChainWorksForLocalVariablesStruct() {
 			AssertCorrect(
 @"struct S {}
@@ -96,6 +126,20 @@ public void M() {
 ");
 		}
 
+		[Test]
+		public void AssigningToPropertyWithSetMethodWorksLong()
+		{
+			AssertCorrect(
+@"public long P { get; set; }
+public void M() {
+	long i = 0;
+	// BEGIN
+	P = i;
+	// END
+}",
+@"	this.set_$P($i);
+");
+		}
 		[Test]
 		public void AssigningToPropertyWithSetMethodWorksStruct() {
 			AssertCorrect(
@@ -127,6 +171,23 @@ public void M() {
 		}
 
 		[Test]
+		public void AssignmentChainForPropertiesWithSetMethodsWorksWithSimpleArgumentLong()
+		{
+			AssertCorrect(
+@"public long P1 { get; set; }
+public long P2 { get; set; }
+public void M() {
+	long i = 0;
+	// BEGIN
+	P1 = P2 = i;
+	// END
+}",
+@"	this.set_$P2($i);
+	this.set_$P1($i);
+");
+		} //TODO: Finish Reading File
+
+		[Test]
 		public void AssignmentChainForPropertiesWithSetMethodsWorksWithSimpleArgumentStruct() {
 			AssertCorrect(
 @"public int P1 { get; set; }
@@ -139,6 +200,24 @@ public void M() {
 }",
 @"	this.set_$P2($Clone($i, {to_Int32}));
 	this.set_$P1($Clone($i, {to_Int32}));
+", mutableValueTypes: true);
+		}
+
+
+		[Test]
+		public void AssignmentChainForPropertiesWithSetMethodsWorksWithSimpleArgumentStructLong()
+		{
+			AssertCorrect(
+@"public long P1 { get; set; }
+public long P2 { get; set; }
+public void M() {
+	long i = 0;
+	// BEGIN
+	P1 = P2 = i;
+	// END
+}",
+@"	this.set_$P2($Clone($i, {to_Int64}));
+	this.set_$P1($Clone($i, {to_Int64}));
 ", mutableValueTypes: true);
 		}
 

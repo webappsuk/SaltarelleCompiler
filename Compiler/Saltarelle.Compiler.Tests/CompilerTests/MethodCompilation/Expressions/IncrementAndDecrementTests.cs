@@ -24,8 +24,23 @@ namespace Saltarelle.Compiler.Tests.CompilerTests.MethodCompilation.Expressions 
 		}
 
 		[Test]
+		public void PrefixIncrementWorksForLocalLongVariables()
+		{
+			AssertCorrect(
+@"public void M() {
+	long i = 0L;
+	// BEGIN
+	++i;
+	// END
+}
+",
+@"	$i = $Int64Increment($i);
+");
+		}
+
+		[Test]
 		public void PostfixWorksForLocalVariables() {
-			AssertCorrectForBoth(
+			AssertCorrect(
 @"public void M() {
 	int i = 0;
 	// BEGIN
@@ -34,6 +49,22 @@ namespace Saltarelle.Compiler.Tests.CompilerTests.MethodCompilation.Expressions 
 }
 ",
 @"	$i++;
+");
+		}
+
+
+		[Test]
+		public void PostfixIncrementWorksForLocalLongVariables()
+		{
+			AssertCorrect(
+@"public void M() {
+	long i = 0L;
+	// BEGIN
+	i++;
+	// END
+}
+",
+@"	$i = $Int64Increment($i);
 ");
 		}
 
@@ -135,6 +166,35 @@ public void M() {
 ");
 		}
 
+
+		[Test]
+		public void PrefixIncrementForALongPropertyWithMethodsWorksWhenTheReturnValueIsNotUsed() {
+			AssertCorrect(
+@"public long P { get; set; }
+public void M() {
+	int i = 0;
+	// BEGIN
+	++P;
+	// END
+}",
+@"	this.set_$P($Int64Increment(this.get_$P()));
+");
+		}
+
+		[Test]
+		public void PrefixDecrementForALongPropertyWithMethodsWorksWhenTheReturnValueIsNotUsed() {
+			AssertCorrect(
+@"public long P { get; set; }
+public void M() {
+	int i = 0;
+	// BEGIN
+	--P;
+	// END
+}",
+@"	this.set_$P($Int64Decrement(this.get_$P()));
+");
+		}
+
 		[Test]
 		public void PostfixForPropertyWithMethodsWorksWhenTheReturnValueIsNotUsed() {
 			AssertCorrectForBoth(
@@ -146,6 +206,34 @@ public void M() {
 	// END
 }",
 @"	this.set_$P(this.get_$P() + 1);
+");
+		}
+
+		[Test]
+		public void PostfixIncrementForALongPropertyWithMethodsWorksWhenTheReturnValueIsNotUsed() {
+			AssertCorrect(
+@"public long P { get; set; }
+public void M() {
+	int i = 0;
+	// BEGIN
+	P++;
+	// END
+}",
+@"	this.set_$P($Int64Increment(this.get_$P()));
+");
+		}
+
+		[Test]
+		public void PostfixDecrementForALongPropertyWithMethodsWorksWhenTheReturnValueIsNotUsed() {
+			AssertCorrect(
+@"public long P { get; set; }
+public void M() {
+	int i = 0;
+	// BEGIN
+	P--;
+	// END
+}",
+@"	this.set_$P($Int64Decrement(this.get_$P()));
 ");
 		}
 
@@ -166,6 +254,38 @@ public void M() {
 		}
 
 		[Test]
+		public void PrefixIncrementForALongPropertyWithMethodsWorksWhenTheReturnValueIsUsed() {
+			AssertCorrect(
+@"public long P { get; set; }
+public void M() {
+	long i = 0;
+	// BEGIN
+	long j = ++P;
+	// END
+}",
+@"	var $tmp1 = $Int64Increment(this.get_$P());
+	this.set_$P($tmp1);
+	var $j = $tmp1;
+");
+		}
+
+		[Test]
+		public void PrefixDecrementForALongPropertyWithMethodsWorksWhenTheReturnValueIsUsed() {
+			AssertCorrect(
+@"public long P { get; set; }
+public void M() {
+	long i = 0;
+	// BEGIN
+	long j = --P;
+	// END
+}",
+@"	var $tmp1 = $Int64Decrement(this.get_$P());
+	this.set_$P($tmp1);
+	var $j = $tmp1;
+");
+		}
+
+		[Test]
 		public void PostfixForPropertyWithMethodsWorksWhenTheReturnValueIsUsed() {
 			AssertCorrectForBoth(
 @"public int P { get; set; }
@@ -180,6 +300,38 @@ public void M() {
 ");
 		}
 
+		[Test]
+		public void PostfixIncrementForALongPropertyWithMethodsWorksWhenTheReturnValueIsUsed() {
+			AssertCorrect(
+@"public long P { get; set; }
+public void M() {
+	long i = 0;
+	// BEGIN
+	long j = P++;
+	// END
+}",
+@"	var $tmp1 = this.get_$P();
+	this.set_$P($Int64Increment($tmp1));
+	var $j = $tmp1;
+");
+		}
+
+		[Test]
+		public void PostfixDecrementForALongPropertyWithMethodsWorksWhenTheReturnValueIsUsed() {
+			AssertCorrect(
+@"public long P { get; set; }
+public void M() {
+	long i = 0;
+	// BEGIN
+	long j = P--;
+	// END
+}",
+@"	var $tmp1 = this.get_$P();
+	this.set_$P($Int64Decrement($tmp1));
+	var $j = $tmp1;
+");
+		}
+		//TODO Continue with long tests
 		[Test]
 		public void PrefixForPropertyWithMethodsOnlyInvokesTheTargetOnce() {
 			AssertCorrectForBoth(

@@ -195,25 +195,87 @@ namespace Saltarelle.Compiler.Tests.CompilerTests.MethodCompilation.Expressions 
 		}
 
 		[Test]
-		public void BitwiseOperationOnLongAndULongIsAnError() {
-			var er = new MockErrorReporter(false);
-			Compile(new[] { "class C { public void M() { long v = 0; var v2 = ~v; } }" }, errorReporter: er);
-			Assert.That(er.AllMessages.Any(msg => msg.Severity == MessageSeverity.Error && msg.Code == 7540));
-
-			er = new MockErrorReporter(false);
-			Compile(new[] { "class C { public void M() { ulong v = 0; var v2 = ~v; } }" }, errorReporter: er);
-			Assert.That(er.AllMessages.Any(msg => msg.Severity == MessageSeverity.Error && msg.Code == 7540));
+		public void NonLiftedUnaryPlusForLongWorks()
+		{
+			AssertCorrect(
+@"public void M() {
+	long a = 0;
+	// BEGIN
+	var b = +a;
+	// END
+}",
+@"	var $b = $a;
+");
 		}
 
 		[Test]
-		public void BitwiseOperationOnNullableLongAndULongIsAnError() {
-			var er = new MockErrorReporter(false);
-			Compile(new[] { "class C { public void M() { long? v = 0; var v2 = ~v; } }" }, errorReporter: er);
-			Assert.That(er.AllMessages.Any(msg => msg.Severity == MessageSeverity.Error && msg.Code == 7540));
+		public void NonLiftedUnaryMinusForLongWorks()
+		{
+			AssertCorrect(
+@"public void M() {
+	long a = 0;
+	// BEGIN
+	var b = -a;
+	// END
+}",
+@"	var $b = $Int64Negation($a);
+");
+		}
 
-			er = new MockErrorReporter(false);
-			Compile(new[] { "class C { public void M() { ulong? v = 0; var v2 = ~v; } }" }, errorReporter: er);
-			Assert.That(er.AllMessages.Any(msg => msg.Severity == MessageSeverity.Error && msg.Code == 7540));
+		[Test]
+		public void NonLiftedBitwiseNotForLongWorks()
+		{
+			AssertCorrect(
+@"public void M() {
+	long a = 0;
+	// BEGIN
+	var b = ~a;
+	// END
+}",
+@"	var $b = $Int64OnesComplement($a);
+");
+		}
+
+		[Test]
+		public void LiftedUnaryPlusForLongWorks()
+		{
+			AssertCorrect(
+@"public void M() {
+	long? a = 0;
+	// BEGIN
+	var b = +a;
+	// END
+}",
+@"	var $b = $a;
+");
+		}
+
+		[Test]
+		public void LiftedUnaryMinusForLongWorks()
+		{
+			AssertCorrect(
+@"public void M() {
+	long? a = 0;
+	// BEGIN
+	var b = -a;
+	// END
+}",
+@"	var $b = $Lift($Int64Negation($a));
+");
+		}
+
+		[Test]
+		public void LiftedBitwiseNotForLongWorks()
+		{
+			AssertCorrect(
+@"public void M() {
+	long? a = 0;
+	// BEGIN
+	var b = ~a;
+	// END
+}",
+@"	var $b = $Lift($Int64OnesComplement($a));
+");
 		}
 	}
 }

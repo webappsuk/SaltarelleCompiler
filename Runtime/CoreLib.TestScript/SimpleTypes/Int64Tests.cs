@@ -117,6 +117,14 @@ namespace CoreLib.TestScript.SimpleTypes {
 		}
 
 		[Test]
+		public void AdditionAssignOfLargeInt64Works()
+		{
+			long v1 = 50000000000L, v3 = 3;
+			v1 += v3;
+			Assert.AreEqual(v1, 50000000003, "Positive");
+		}
+
+		[Test]
 		public void SubtractionOfLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1, v3 = 3;
@@ -159,16 +167,16 @@ namespace CoreLib.TestScript.SimpleTypes {
 		public void OrOfLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1, v3 = 25000000000L;
-			Assert.AreEqual(v1 | v3, 6444101632, "Positive");
-			Assert.AreEqual(v2 | v3, 18555897856, "Positive");
+			Assert.AreEqual(v1 | v3, 68555898368, "Positive");
+			Assert.AreEqual(v2 | v3, -43555897856, "Negatie");
 		}
 
 		[Test]
 		public void XOrOfLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1, v3 = 25000000000L;
-			Assert.AreEqual(v1 ^ v3, -50000000001L, "Negative");
-			Assert.AreEqual(v2 ^ v3, 49999999999L, "Positive");
+			Assert.AreEqual(v1 ^ v3, 62111796736, "Positive");
+			Assert.AreEqual(v2 ^ v3, -62111795712, "Negative");
 		}
 
 		[Test]
@@ -176,89 +184,110 @@ namespace CoreLib.TestScript.SimpleTypes {
 		{
 			long v1 = 50000000000L, v2 = -v1;
 			Assert.AreEqual(~v1, -50000000001L, "Positive");
-			Assert.AreEqual(~v2, 49999999999L, "Positive");
+			Assert.AreEqual(~v2, 49999999999L, "Negative");
 		}
 		
 		[Test]
 		public void LeftShiftOfLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1;
-			Assert.AreEqual(v1 << 13, -50000000001L, "Negative");
-			Assert.AreEqual(v2 << 13, 49999999999L, "Positive");
+			Assert.AreEqual(v1 << 13, 409600000000000, "Positive");
+			Assert.AreEqual(v2 << 13, -409600000000000, "Negative");
 		}
 
 		[Test]
 		public void RightShiftOfLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1;
-			Assert.AreEqual(v1 >> 13, -50000000001L, "Negative");
-			Assert.AreEqual(v2 >> 13, 49999999999L, "Positive");
+			Assert.AreEqual(v1 >> 13, 6103515L, "Positive");
+			Assert.AreEqual(v2 >> 13, -6103516L, "Negative");
 		}
 		
 		[Test]
 		public void EqualityOfLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1;
-			Assert.AreEqual(v1 == 13, false, "Negative");
-			Assert.AreEqual(v2 == 13, false, "Positive");
-			Assert.AreEqual(v2 == 13, false, "Positive");
+			Assert.AreEqual(v1 == 13, false, "Positive");
+			Assert.AreEqual(v2 == 13, false, "Negative");
 		}
 
 		[Test]
 		public void InequalityOfLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1;
-			Assert.AreEqual(v1 != 13, true, "Negative");
-			Assert.AreEqual(v2 != 13, true, "Positive");
+			Assert.AreEqual(v1 != 13, true, "Positive");
+			Assert.AreEqual(v2 != 13, true, "Negative");
 		}
 		
 		[Test]
 		public void LessThanOrEqualOfLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1;
-			Assert.AreEqual(v1 <= 13, false, "Negative");
-			Assert.AreEqual(v2 <= 13, false, "Positive");
+			Assert.AreEqual(v1 <= 13, false, "Positive");
+			Assert.AreEqual(v2 <= 13, true, "Negative");
 		}
 
 		[Test]
 		public void LessThanOfLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1;
-			Assert.AreEqual(v1 < 13, false, "Negative");
-			Assert.AreEqual(v2 < 13, false, "Positive");
+			Assert.AreEqual(v1 < 13, false, "Positive");
+			Assert.AreEqual(v2 < 13, true, "Negative");
 		}
-
-
+		
 		[Test]
 		public void GreaterThanOrEqualOfLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1;
-			Assert.AreEqual(v1 >= 13, false, "Negative");
-			Assert.AreEqual(v2 >= 13, false, "Positive");
+			Assert.AreEqual(v1 >= 13, true, "Positive");
+			Assert.AreEqual(v2 >= 13, false, "Negative");
 		}
 
 		[Test]
 		public void GreaterThanOfLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1;
-			Assert.AreEqual(v1 > 13, false, "Negative");
-			Assert.AreEqual(v2 > 13, false, "Positive");
+			Assert.AreEqual(v1 > 13, true, "Positive");
+			Assert.AreEqual(v2 > 13, false, "Negative");
 		}
 
 		[Test]
-		public void IncrementLargeInt64Works()
+		public void PreIncrementLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1;
-			Assert.AreEqual(v1++, 50000000001L, "Negative");
-			Assert.AreEqual(v2++, -49999999999L, "Positive");
+			Assert.AreEqual(++v1, 50000000001L, "Positive");
+			Assert.AreEqual(++v2, -49999999999L, "Negative");
 		}
 
 		[Test]
-		public void DecrementLargeInt64Works()
+		public void PreDecrementLargeInt64Works()
 		{
 			long v1 = 50000000000L, v2 = -v1;
-			Assert.AreEqual(v1--, 50000000001L, "Negative");
-			Assert.AreEqual(v2--, -49999999999L, "Positive");
+			Assert.AreEqual(--v1, 50000000001L, "Positive");
+			Assert.AreEqual(--v2, -49999999999L, "Negative");
+		}
+
+		[Test]
+		public void PostIncrementLargeInt64Works()
+		{
+			long v1 = 50000000000L, v2 = -v1;
+			Assert.AreEqual(v1++, 50000000000L, "Positive");
+			Assert.AreEqual(v2++, -50000000000L, "Negative");
+		}
+
+		[Test]
+		public void PostIncrementAssignLargeInt64Works() {
+			long v1 = 50000000000L;
+			v1 = v1++;
+			Assert.AreEqual(v1, 50000000000L, "Positive");
+		}
+
+		[Test]
+		public void PostDecrementLargeInt64Works()
+		{
+			long v1 = 50000000000L, v2 = -v1;
+			Assert.AreEqual(v1--, 50000000000L, "Positive");
+			Assert.AreEqual(v2--, -50000000000L, "Negative");
 		}
 		[Test]
 		public void ToStringWithoutRadixWorks() {
@@ -274,6 +303,28 @@ namespace CoreLib.TestScript.SimpleTypes {
 			Assert.AreEqual(((long)123).ToString(10), "123");
 			Assert.AreEqual(((long)0x123).ToString(16), "123");
 		}
+		
+		[Test]
+		public void DoYouEvenLiftBro() {
+			long lol = 5L;
+			long? weight = lol;
+			var a = ~weight;
+			var b = +weight;
+			var c = -weight;
+			Assert.AreEqual(a, -6L);
+			Assert.AreEqual(b, 5L);
+			Assert.AreEqual(c, -5L);
+		}
+
+		//[Test]
+		//public void CompilerNoErrorTests() {
+		//	public long P1 { get; set; }
+		//	public long P2 { get; set; }
+		//	public void M() {
+		//	long i = 0;
+	
+		//	P1 = P2 = i;
+		//}
 
 		[Test]
 		public void GetHashCodeWorks() {

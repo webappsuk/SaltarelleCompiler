@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Saltarelle.Compiler.ScriptSemantics;
 
@@ -18,6 +20,28 @@ namespace Saltarelle.Compiler.Tests.CompilerTests.MethodCompilation.Expressions 
 			}
 		}
 
+		protected void AssertCorrectForBulkLongOperators(string csharp, string expected, bool includeEqualsAndNotEquals, IMetadataImporter metadataImporter = null) {
+			// Bulk operators are all except for division, shift right, coalesce and the logical operators.
+			foreach (
+				var op in
+					new Dictionary<string, string> {
+						{"*", "$Int64Multiplication"},
+						{"%", "$Int64Division"},
+						{"+", "$Int64Addition"},
+						{"-", "$Int64Subtraction"},
+						{"<<", "$Int64LeftShift"},
+						{"<", "$Int64LessThan"},
+						{">", "$Int64GreaterThan"},
+						{"<=", "$Int64LessThanOrEqual"},
+						{">=", "$Int64GreaterThanOrEqual"},
+						{"&", "$Int64BitwiseAnd"},
+						{"^", "$Int64ExclusiveOr"},
+						{"|", "$Int64BitwiseOr"}
+					}) {
+						AssertCorrect(csharp.Replace("+", op.Key), expected.Replace("$op", op.Value), metadataImporter);
+			}
+		}
+
 		[Test]
 		public void NonLiftedBulkOperatorsWork() {
 			AssertCorrectForBulkOperators(
@@ -29,6 +53,32 @@ namespace Saltarelle.Compiler.Tests.CompilerTests.MethodCompilation.Expressions 
 }",
 @"	var $c = $a + $b;
 ", includeEqualsAndNotEquals: true);
+		}
+
+		[Test]
+		public void NonLiftedBulkLongOperatorsWork() {
+			AssertCorrectForBulkLongOperators(
+@"public void M() {
+	long a = 0, b = 0;
+	// BEGIN
+	var c = a + b;
+	// END
+}",
+@"	var $c = $op($a, $b);
+", includeEqualsAndNotEquals: true);
+		}
+
+		[Test]
+		public void NonLiftedBulkLongaOperatorsWork() {
+			AssertCorrect(
+@"public void M() {
+	long a = 0, b = 0;
+	// BEGIN
+	var c = a + b;
+	// END
+}",
+@"	var $c = $op($a, $b);
+");
 		}
 
 		[Test]
